@@ -10,6 +10,7 @@ import com.sun.squawk.util.MathUtils;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.parsing.IInputOutput;
 
 /**
@@ -18,7 +19,7 @@ import edu.wpi.first.wpilibj.parsing.IInputOutput;
  * the most recent value is returned. There is a single class instance for each joystick and the mapping
  * of ports to hardware buttons depends on the code in the driver station.
  */
-public class MyJoystick extends GenericHID implements IInputOutput{
+public class MyJoystick extends Joystick implements IInputOutput, Controller {
 
     static final byte kDefaultXAxis = 1;
     static final byte kDefaultYAxis = 2;
@@ -148,6 +149,7 @@ public class MyJoystick extends GenericHID implements IInputOutput{
      * @param numButtonTypes The number of button types in the enum.
      */
     protected MyJoystick(int port, int numAxisTypes, int numButtonTypes) {
+    	super(port, numAxisTypes, numButtonTypes);
         m_ds = DriverStation.getInstance();
         m_axes = new byte[numAxisTypes];
         m_buttons = new byte[numButtonTypes];
@@ -367,5 +369,27 @@ public class MyJoystick extends GenericHID implements IInputOutput{
      */
     public void setAxisChannel(AxisType axis, int channel) {
         m_axes[axis.value] = (byte) channel;
+    }
+    
+    /**
+     * Report the input from the actual joystick
+     * 
+     * @param port Which joystick axis to report. 0 = x; 1 = y
+     */
+    public double getVariadicInput(int port) {
+    	switch (port) {
+    	case 0:  return getX();
+    	case 1:  return getY();
+    	default: throw new InvalidPortError("Variadic port specified does not exist.");
+    	}
+    }
+    
+    /**
+     * Report the input from the buttons attached to the joystick
+     * 
+     * @param port The number of the button as labeled on the joystick or documented in the manual.
+     */
+    public boolean getBooleanInput(int port) {
+    	return getRawButton(port);
     }
 }

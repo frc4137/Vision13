@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
  * directory.
  */
 public class VisionIterative extends IterativeRobot {
-	private JoystickManager controls;
+	private ControllerManager controls;
 	private RobotDrive drive;
     /**
      * This function is run when the robot is first started up and should be
@@ -29,7 +29,7 @@ public class VisionIterative extends IterativeRobot {
     	// Joystick Manager: Wrapper for normal Joystick objects, allowing for
     	// calling methods based on button pushes and disabling and enabling
     	// buttons. Ports used: 0, 1
-    	controls = new JoystickManager(new MyJoystick[] {
+    	controls = new ControllerManager(new Controller[] {
 			new MyJoystick(0), new MyJoystick(1)
 		});
     	
