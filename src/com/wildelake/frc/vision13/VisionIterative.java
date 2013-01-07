@@ -7,6 +7,7 @@
 
 package com.wildelake.frc.vision13;
 
+import com.wildelake.frc.vision13.components.CalibratedSpeedController;
 import com.wildelake.frc.vision13.controls.BooleanInput;
 import com.wildelake.frc.vision13.controls.Controller;
 import com.wildelake.frc.vision13.controls.MyJoystick;
@@ -14,14 +15,21 @@ import com.wildelake.frc.vision13.controls.VariadicInput;
 import com.wildelake.frc.vision13.controls.compositions.*;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.RobotDrive;
+import com.wildelake.frc.vision13.utils.*;
 
 public class VisionIterative extends IterativeRobot {
 	private RobotDrive drive;
 	private VariadicControl joy1x, joy1y, joy1rot;
 
 	public void robotInit() {
-		drive = new RobotDrive(0, 1, 2, 3); // the ports of the motors TODO the ports are fake
+		drive = new RobotDrive(
+			new CalibratedSpeedController(new Jaguar(Port.FL_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)),
+			new CalibratedSpeedController(new Jaguar(Port.FR_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)),
+			new CalibratedSpeedController(new Jaguar(Port.BL_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)),
+			new CalibratedSpeedController(new Jaguar(Port.BR_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0))
+		);
 	}
 
 	public void autonomousPeriodic() {
@@ -29,16 +37,16 @@ public class VisionIterative extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		Controller joystick1 = new MyJoystick(0); // TODO make sure that this is the correct port
-		Controller joystick2 = new MyJoystick(1);
+		Controller joystick1 = new MyJoystick(Port.JOYSTICK1); // TODO make sure that this is the correct port
+		Controller joystick2 = new MyJoystick(Port.JOYSTICK2);
 		VariadicControl
-			joy1xRaw = new VariadicInput(joystick1, 0),
-			joy1yRaw = new VariadicInput(joystick1, 1),
-			joy2xRaw = new VariadicInput(joystick2, 0),
-			joy2yRaw = new VariadicInput(joystick2, 1);
+			joy1xRaw = new VariadicInput(joystick1, Port.JOY1X),
+			joy1yRaw = new VariadicInput(joystick1, Port.JOY1Y),
+			joy2xRaw = new VariadicInput(joystick2, Port.JOY2X),
+			joy2yRaw = new VariadicInput(joystick2, Port.JOY2Y);
 		BooleanControl
-			fullSpeed   = new BooleanInput(joystick1, 0), // TODO these ports are made up
-			grannySpeed = new BooleanInput(joystick1, 1);
+			fullSpeed   = new BooleanInput(joystick1, Port.FULL_SPEED_BTN), // TODO these ports are made up
+			grannySpeed = new BooleanInput(joystick1, Port.GRANNY_SPEED_BTN);
 		
 		// setup the driving joystick (1)
 		joy1rot = new VariadicInput(joystick1, 2);
@@ -54,6 +62,7 @@ public class VisionIterative extends IterativeRobot {
 	}
 
 	public void teleopPeriodic() {
+		// TODO if after testing it is found that there is lag when pressing buttons, move this to teleopContinuous
 		Control.tickAll();
 		drive.mecanumDrive_Cartesian(joy1x.getValue(), joy1y.getValue(), joy1rot.getValue(), 0);
 	}
