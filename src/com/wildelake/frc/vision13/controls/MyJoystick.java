@@ -1,4 +1,4 @@
-package com.wildelake.frc.vision13;
+package com.wildelake.frc.vision13.controls;
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) FIRST 2008-2012. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */

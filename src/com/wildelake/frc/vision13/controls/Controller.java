@@ -1,4 +1,4 @@
-package com.wildelake.frc.vision13;
+package com.wildelake.frc.vision13.controls;
 
 public interface Controller {
 	public Object[] getAllInputs();
