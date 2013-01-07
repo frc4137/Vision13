@@ -29,7 +29,10 @@ public class MyRobotDrive extends RobotDrive {
 	 * 			backLeft,  backRight}
 	 */
 	public double[] getMotorSpeed() {
-		return new double[]{this.m_frontLeftMotor.get(), this.m_frontRightMotor.get(), this.m_rearLeftMotor.get(), this.m_rearRightMotor.get()};
+		return new double[] {
+			this.m_frontLeftMotor.get(), this.m_frontRightMotor.get(),
+			this.m_rearLeftMotor .get(), this.m_rearRightMotor .get()
+		};
 	}
 	
 	@Override
