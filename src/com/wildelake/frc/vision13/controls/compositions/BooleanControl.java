@@ -7,8 +7,9 @@ import java.util.ArrayList;
  * @author Adrian
  *
  */
-public class BooleanControl {
+public abstract class BooleanControl implements Control {
 	private ArrayList<Listener> listeners = new ArrayList<Listener>();
+	private boolean value;
 	
 	public static class Listener {
 		public void onEnabled() {}
@@ -19,6 +20,26 @@ public class BooleanControl {
 		public void always(boolean value) {}
 	}
 	
+	public final void tick() {
+		update();
+		triggerEvent(ALWAYS_EVENT);
+	}
+	
+	public abstract void update();
+	
+	protected boolean getValue() {
+		return value;
+	}
+	/**
+	 * please don't call setValue from another control
+	 * TODO make the compiler enforce this if possible
+	 */
+	protected void setValue(boolean value) {
+		boolean oldValue = this.value;
+		this.value = value;
+		if (oldValue != value) triggerEvent(ON_CHANGE_EVENT);
+	}
+	
 	protected final int ON_ENABLED_EVENT = 0;
 	protected final int ON_DISABLED_EVENT = 1;
 	protected final int ON_CHANGE_EVENT = 2;
@@ -26,7 +47,7 @@ public class BooleanControl {
 	protected final int WHILE_DISABLED_EVENT = 4;
 	protected final int ALWAYS_EVENT = 5;
 	
-	protected void triggerEvent(int event, boolean value) {
+	private void triggerEvent(int event) {
 		for (Listener listener : listeners) {
 			switch (event) {
 			case ON_ENABLED_EVENT: listener.onEnabled(); break;

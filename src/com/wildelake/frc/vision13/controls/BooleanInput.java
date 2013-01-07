@@ -1,19 +1,17 @@
 package com.wildelake.frc.vision13.controls;
 
-public class BooleanInput extends ControllerInput {
+import com.wildelake.frc.vision13.controls.compositions.BooleanControl;
+
+public class BooleanInput extends BooleanControl {
+	private final Controller controller;
+	private final int port;
 	
-	public BooleanInput(ControllerManager top) {
-		super(top);
-	}
-
-	@Override
-	public int getControllerID() {
-		return 0;
-	}
-
-	@Override
-	public int getPort() {
-		return 0;
+	public BooleanInput(Controller controller, int port) {
+		this.controller = controller;
+		this.port = port;
 	}
 	
+	public void update() {
+		setValue(controller.getBooleanInput(port));
+	}
 }

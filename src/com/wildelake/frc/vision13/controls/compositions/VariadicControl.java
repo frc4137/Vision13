@@ -6,8 +6,9 @@ import java.util.ArrayList;
  * A standard event-based interface for composing and using variadic inputs
  */
 
-public class VariadicControl {
+public abstract class VariadicControl implements Control {
 	private ArrayList<Listener> listeners = new ArrayList<Listener>();
+	private double value;
 	
 	public static class Listener {
 		public void whilePositive(double value) {}
@@ -19,13 +20,31 @@ public class VariadicControl {
 		public void always(double value) {}
 	}
 	
+	public final void tick() {
+		update();
+		triggerEvent(ALWAYS_EVENT);
+	}
+	
+	public abstract void update();
+	
+	protected double getValue() {
+		return value;
+	}
+	/**
+	 * please don't call setValue from another control
+	 * TODO make the compiler enforce this if possible
+	 */
+	protected void setValue(double value) {
+		this.value = value;
+	}
+	
 	// Sorry, java ME doesn't support enums
 	protected final int WHILE_POSITIVE_EVENT = 0;
 	protected final int WHILE_NEGATIVE_EVENT = 1;
 	protected final int WHILE_ZERO_EVENT = 2;
 	protected final int ALWAYS_EVENT = 3;
 	
-	protected void triggerEvent(int event, double value) {
+	protected void triggerEvent(int event) {
 		for (Listener listener : listeners) {
 			switch (event) {
 			case WHILE_POSITIVE_EVENT: listener.whilePositive(value); break;

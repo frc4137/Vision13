@@ -1,19 +1,17 @@
 package com.wildelake.frc.vision13.controls;
 
-public class VariadicInput extends ControllerInput {
+import com.wildelake.frc.vision13.controls.compositions.VariadicControl;
 
-	public VariadicInput(ControllerManager top) {
-		super(top);
+public class VariadicInput extends VariadicControl {
+	private final Controller controller;
+	private final int port;
+	
+	public VariadicInput(Controller controller, int port) {
+		this.controller = controller;
+		this.port = port;
 	}
-
-	@Override
-	public int getControllerID() {
-		return 0;
+	
+	public void update() {
+		setValue(controller.getVariadicInput(port));
 	}
-
-	@Override
-	public int getPort() {
-		return 0;
-	}
-
 }
