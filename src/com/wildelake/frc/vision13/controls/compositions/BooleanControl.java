@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * @author Adrian
  *
  */
-public abstract class BooleanControl implements Control {
+public abstract class BooleanControl extends Control {
 	private ArrayList<Listener> listeners = new ArrayList<Listener>();
 	private boolean value;
 	
@@ -27,7 +27,7 @@ public abstract class BooleanControl implements Control {
 	
 	public abstract void update();
 	
-	protected boolean getValue() {
+	public boolean getValue() {
 		return value;
 	}
 	/**

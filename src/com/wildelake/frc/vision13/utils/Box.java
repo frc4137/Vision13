@@ -9,7 +9,7 @@ public class Box<T> {
 	}
 	
 	public Box(T initialValue) {
-		value = initialValue
+		value = initialValue;
 	}
 	
 	public T getValue() {

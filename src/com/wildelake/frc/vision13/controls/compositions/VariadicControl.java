@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * A standard event-based interface for composing and using variadic inputs
  */
 
-public abstract class VariadicControl implements Control {
+public abstract class VariadicControl extends Control {
 	private ArrayList<Listener> listeners = new ArrayList<Listener>();
 	private double value;
 	
@@ -27,7 +27,7 @@ public abstract class VariadicControl implements Control {
 	
 	public abstract void update();
 	
-	protected double getValue() {
+	public double getValue() {
 		return value;
 	}
 	/**

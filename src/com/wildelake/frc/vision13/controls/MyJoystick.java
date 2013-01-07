@@ -386,6 +386,7 @@ public class MyJoystick extends Joystick implements IInputOutput, Controller {
     	switch (port) {
     	case 0:  return getX();
     	case 1:  return getY();
+    	case 2:  return getTwist();
     	default: throw new InvalidPortError("Variadic port specified does not exist.");
     	}
     }
