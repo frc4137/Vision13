@@ -6,8 +6,6 @@ public final class VariadicInput extends VariadicControl {
 	private final Controller controller;
 	private final int port;
 	
-	private static H
-	
 	public VariadicInput(Controller controller, int port) {
 		this.controller = controller;
 		this.port = port;
