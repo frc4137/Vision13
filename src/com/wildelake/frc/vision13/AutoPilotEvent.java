@@ -8,6 +8,8 @@ package com.wildelake.frc.vision13;
  */
 public class AutoPilotEvent {
 	
+	// trivial change by adrusi
+	
 	private State desired;
 	
 	public AutoPilotEvent() {
