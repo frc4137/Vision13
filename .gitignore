@@ -1,0 +1,6 @@
+build/*
+.Trashes
+.DS_Store
+thumbs.db
+*.log
+logs/*
