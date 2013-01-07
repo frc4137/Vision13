@@ -1,10 +1,10 @@
 package com.wildelake.frc.vision13.controls;
 
 public abstract class ControllerInput {
-	private ControllerManager parent;
-	public ControllerInput(ControllerManager top) {
+	protected Controller parent;
+	protected int portID;
+	public ControllerInput(Controller top, int port) {
 		parent = top;
+		portID = port;
 	}
-	public abstract int getControllerID();
-	public abstract int getPort();
 }
