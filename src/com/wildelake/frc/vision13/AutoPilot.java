@@ -3,6 +3,8 @@ package com.wildelake.frc.vision13;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.wildelake.frc.vision13.controls.ControllerManager;
+
 /**
  * Class AutoPilot
  * helps to pilot the robot
