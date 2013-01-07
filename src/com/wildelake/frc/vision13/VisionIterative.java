@@ -9,7 +9,6 @@ package com.wildelake.frc.vision13;
 
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.RobotDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -20,7 +19,8 @@ import edu.wpi.first.wpilibj.RobotDrive;
  */
 public class VisionIterative extends IterativeRobot {
 	private ControllerManager controls;
-	private RobotDrive drive;
+	private MyRobotDrive drive;
+	private AutoPilot auto;
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -34,14 +34,20 @@ public class VisionIterative extends IterativeRobot {
 		});
     	
     	// Robot Drive: Initializes the drive system. Ports used: 0, 1, 2, 3.
-    	drive = new RobotDrive(0, 1, 2, 3);
+    	drive = new MyRobotDrive(0, 1, 2, 3);
+    	
+    	// Autopilot: Runs periodically, returning events for processing during autonomous
+    	auto = new AutoPilot(drive, controls);
     }
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-
+    	String[] events = auto.getEvents();
+    	for (int i = 0; i < events.length; i++) {
+    		// TODO: Process Events from the AutoPilot
+    	}
     }
 
     /**

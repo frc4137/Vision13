@@ -9,7 +9,6 @@ package com.wildelake.frc.vision13;
 import com.sun.squawk.util.MathUtils;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.parsing.IInputOutput;
 
@@ -369,6 +368,13 @@ public class MyJoystick extends Joystick implements IInputOutput, Controller {
      */
     public void setAxisChannel(AxisType axis, int channel) {
         m_axes[axis.value] = (byte) channel;
+    }
+    
+    /**
+     * Report ALL inputs.
+     */
+    public Object[] getAllInputs() {
+    	return new Object[]{getX(), getY(), m_buttons};
     }
     
     /**
