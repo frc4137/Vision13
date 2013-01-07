@@ -8,10 +8,6 @@
 package com.wildelake.frc.vision13;
 
 
-import com.wildelake.frc.vision13.controls.Controller;
-import com.wildelake.frc.vision13.controls.ControllerManager;
-import com.wildelake.frc.vision13.controls.MyJoystick;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
 
 /**

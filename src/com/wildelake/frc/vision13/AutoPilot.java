@@ -3,8 +3,6 @@ package com.wildelake.frc.vision13;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.wildelake.frc.vision13.controls.ControllerManager;
-
 /**
  * Class AutoPilot
  * helps to pilot the robot
@@ -17,7 +15,7 @@ import com.wildelake.frc.vision13.controls.ControllerManager;
 public class AutoPilot {
 	
 	private Location loc;
-	private HashMap<String, AutoPilotEvent> events;
+	private ArrayList<AutoPilotListener> events;
 	private MyRobotDrive drive;
 	private ControllerManager controls;
 	
@@ -25,25 +23,25 @@ public class AutoPilot {
 		loc = new Location(0, 0, 0);
 		drive = null;
 		controls = null;
-		events = new HashMap<String, AutoPilotEvent>();
+		events = new HashMap<String, AutoPilotListenner>();
 	}
 	public AutoPilot(MyRobotDrive drive) {
 		loc = drive.getLocation();
 		this.drive = drive;
 		controls = null;
-		events = new HashMap<String, AutoPilotEvent>();
+		events = new HashMap<String, AutoPilotListenner>();
 	}
 	public AutoPilot(MyRobotDrive drive, ControllerManager controls) {
 		loc = drive.getLocation();
 		this.drive = drive;
 		this.controls = controls;
-		events = new HashMap<String, AutoPilotEvent>();
+		events = new HashMap<String, AutoPilotListenner>();
 	}
 	public AutoPilot(ControllerManager controls) {
 		loc = null;
 		drive = null;
 		this.controls = controls;
-		events = new HashMap<String, AutoPilotEvent>();
+		events = new HashMap<String, AutoPilotListenner>();
 	}
 	
 	/**
@@ -61,7 +59,7 @@ public class AutoPilot {
 	public String[] getEvents() {
 		ArrayList<String> eventListString = new ArrayList<String>();
 		for (int i = 0; i < events.size(); i++) {
-			AutoPilotEvent evt = events.get(events.keySet().toArray()[i]);
+			AutoPilotListenner evt = events.get(events.keySet().toArray()[i]);
 			if ((evt.getType().equals("Location")     && evt.equals(loc))
 			||  (evt.getType().equals("MyRobotDrive") && evt.equals(drive))
 			||   evt.equals(controls)) {
@@ -71,7 +69,7 @@ public class AutoPilot {
 		return eventListString.toArray(new String[]{});
 	}
 	
-	public void addEvent(String name, AutoPilotEvent event) {
+	public void addEvent(String name, AutoPilotListenner event) {
 		events.put(name, event);
 	}
 	public void addEvent(String name, String type) {

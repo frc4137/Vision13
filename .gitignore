@@ -4,3 +4,4 @@ build/*
 thumbs.db
 *.log
 logs/*
+.classpath
