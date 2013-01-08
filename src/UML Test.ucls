@@ -1,0 +1,294 @@
+<class-diagram version="1.0.11" icons="true" automaticImage="PNG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="com.wildelake.frc.vision13.VisionIterative" 
+    project="Vision13" file="/Vision13/src/com/wildelake/frc/vision13/VisionIterative.java" binary="false">    
+    <position height="162" width="171" x="3229" y="135"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" 
+    name="com.wildelake.frc.vision13.controls.compositions.BooleanControl" project="Vision13" 
+    file="/Vision13/src/com/wildelake/frc/vision13/controls/compositions/BooleanControl.java" binary="false">    
+    <position height="298" width="229" x="2327" y="962"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="com.wildelake.frc.vision13.controls.compositions.Control" 
+    project="Vision13" file="/Vision13/src/com/wildelake/frc/vision13/controls/compositions/Control.java" binary="false">    
+    <position height="111" width="229" x="2379" y="135"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="com.wildelake.frc.vision13.pilot.ManualPilot" 
+    project="Vision13" file="/Vision13/src/com/wildelake/frc/vision13/pilot/ManualPilot.java" binary="false">    
+    <position height="145" width="216" x="2648" y="135"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="5" corner="BOTTOM_RIGHT" language="java" name="com.wildelake.frc.vision13.pilot.Pilot" 
+    project="Vision13" file="/Vision13/src/com/wildelake/frc/vision13/pilot/Pilot.java" binary="false">    
+    <position height="77" width="149" x="2977" y="473"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" 
+    name="com.wildelake.frc.vision13.controls.compositions.ToggleMultiplyVariadicControl" project="Vision13" 
+    file="/Vision13/src/com/wildelake/frc/vision13/controls/compositions/ToggleMultiplyVariadicControl.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="2846" y="908"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" 
+    name="com.wildelake.frc.vision13.controls.compositions.VariadicControl" project="Vision13" 
+    file="/Vision13/src/com/wildelake/frc/vision13/controls/compositions/VariadicControl.java" binary="false">    
+    <position height="264" width="229" x="2708" y="473"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" 
+    name="com.wildelake.frc.vision13.controls.compositions.BooleanControl.Listener" project="Vision13" 
+    file="/Vision13/src/com/wildelake/frc/vision13/controls/compositions/BooleanControl.java" binary="false">    
+    <position height="-1" width="-1" x="2948" y="1146"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="com.wildelake.frc.vision13.controls.compositions.ControlSet" 
+    project="Vision13" file="/Vision13/src/com/wildelake/frc/vision13/controls/compositions/ControlSet.java" 
+    binary="false">    
+    <position height="162" width="229" x="2379" y="473"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="10" corner="BOTTOM_RIGHT" language="java" 
+    name="com.wildelake.frc.vision13.controls.compositions.VariadicControl.Listener" project="Vision13" 
+    file="/Vision13/src/com/wildelake/frc/vision13/controls/compositions/VariadicControl.java" binary="false">    
+    <position height="145" width="229" x="3160" y="777"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <interface id="11" corner="BOTTOM_RIGHT" language="java" name="com.wildelake.frc.vision13.controls.Controller" 
+    project="Vision13" file="/Vision13/src/com/wildelake/frc/vision13/controls/Controller.java" binary="false">    
+    <position height="-1" width="-1" x="2770" y="57"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="com.wildelake.frc.vision13.controls.BooleanInput" 
+    project="Vision13" file="/Vision13/src/com/wildelake/frc/vision13/controls/BooleanInput.java" binary="false">    
+    <position height="-1" width="-1" x="2098" y="411"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="13" corner="BOTTOM_RIGHT" language="java" name="com.wildelake.frc.vision13.controls.VariadicInput" 
+    project="Vision13" file="/Vision13/src/com/wildelake/frc/vision13/controls/VariadicInput.java" binary="false">    
+    <position height="-1" width="-1" x="3105" y="205"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association id="14">    
+    <bendpoint x="2895" y="425"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="15" name="joy1y">        
+        <position height="15" width="36" x="2851" y="422"/>      
+      </attribute>      
+      <multiplicity id="16" minimum="0" maximum="1">        
+        <position height="15" width="23" x="2895" y="422"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="17">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="18" name="manual"/>      
+      <multiplicity id="19" minimum="0" maximum="1">        
+        <position height="15" width="23" x="3114" y="447"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="20">    
+    <bendpoint x="3032" y="794"/>    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="21" name="listeners">        
+        <position height="15" width="53" x="3072" y="822"/>      
+      </attribute>      
+      <multiplicity id="22" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="23">    
+    <bendpoint x="2296" y="777"/>    
+    <bendpoint x="2296" y="473"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <nesting id="24">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="10"/>  
+  </nesting>  
+  <association id="25">    
+    <bendpoint x="2256" y="86"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="26" name="controller"/>      
+      <multiplicity id="27" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="28">    
+    <bendpoint x="2719" y="815"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="29" name="source"/>      
+      <multiplicity id="30" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="31">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="8"/>  
+  </nesting>  
+  <association id="32">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="33" name="joy1rot"/>      
+      <multiplicity id="34" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="35">    
+    <bendpoint x="2696" y="1193"/>    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="36" name="listeners"/>      
+      <multiplicity id="37" minimum="0" maximum="2147483647">        
+        <position height="15" width="21" x="2802" y="1182"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="38">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="39" name="registry">        
+        <position height="15" width="47" x="2445" y="318"/>      
+      </attribute>      
+      <multiplicity id="40" minimum="0" maximum="2147483647">        
+        <position height="15" width="21" x="2494" y="318"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="41">    
+    <bendpoint x="2199" y="740"/>    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="42">    
+    <bendpoint x="2700" y="426"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="43" name="joy1x">        
+        <position height="15" width="36" x="2667" y="433"/>      
+      </attribute>      
+      <multiplicity id="44" minimum="0" maximum="1">        
+        <position height="15" width="23" x="2714" y="434"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="45">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="46" name="joystick1"/>      
+      <multiplicity id="47" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="48">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <generalization id="49">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <generalization id="50">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <generalization id="51">    
+    <bendpoint x="2547" y="361"/>    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <association id="52">    
+    <bendpoint x="2957" y="65"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="53" name="controller"/>      
+      <multiplicity id="54" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="55">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="56" name="toggle">        
+        <position height="15" width="41" x="2592" y="1050"/>      
+      </attribute>      
+      <multiplicity id="57" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="58">    
+    <bendpoint x="2388" y="402"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="59" name="set">        
+        <position height="15" width="23" x="2388" y="446"/>      
+      </attribute>      
+      <multiplicity id="60" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="61">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

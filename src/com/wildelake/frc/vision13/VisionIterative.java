@@ -8,11 +8,7 @@
 package com.wildelake.frc.vision13;
 
 import com.wildelake.frc.vision13.components.CalibratedSpeedController;
-import com.wildelake.frc.vision13.controls.BooleanInput;
-import com.wildelake.frc.vision13.controls.Controller;
 import com.wildelake.frc.vision13.controls.MyJoystick;
-import com.wildelake.frc.vision13.controls.VariadicInput;
-import com.wildelake.frc.vision13.controls.compositions.*;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;

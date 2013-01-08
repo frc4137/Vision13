@@ -2,8 +2,6 @@ package com.wildelake.frc.vision13.controls.compositions;
 
 import java.util.ArrayList;
 
-import com.wildelake.frc.vision13.pilot.Pilot;
-
 /**
  * ControlSet allows for creating multiple sets of controls which can be
  * switched between on the fly.
