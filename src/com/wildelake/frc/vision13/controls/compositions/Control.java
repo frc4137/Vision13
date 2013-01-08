@@ -1,23 +1,29 @@
 package com.wildelake.frc.vision13.controls.compositions;
 
-import java.util.ArrayList;
+
 
 /**
- * Control deals with updating controls on every tick of the main loop.
- * Note that by using a registry, controls will never be marked by the GC/
- * DO NOT create controls in any sort of loop, they are meant to last for
- * about the life of the program.
+ * Control adds facilities for conveniently binding a Control to a ControlSet
  */
 public abstract class Control {
 	public abstract void tick();
 	
-	private static ArrayList<Control> registry;
-	
 	public Control() {
-		registry.add(this);
+		synchronized (set) {
+			if (set != null) set.add(this);
+		}
 	}
 	
-	public static void tickAll() {
-		for (Control control: registry) control.tick();
+	private static ControlSet set = null;
+	
+	/**
+	 * `buildControlSet' does all the interesting stuff here. It's ugly, but it works, and
+	 * its ugliness shouldn't matter since there's no real reason to use multithreading on
+	 * the cRIO.
+	 */
+	public static synchronized void buildControlSet(ControlSet set) {
+		Control.set = set;
+		set.buildControlSet();
+		Control.set = null;
 	}
 }

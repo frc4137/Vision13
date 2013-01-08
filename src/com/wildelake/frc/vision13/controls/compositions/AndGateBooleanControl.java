@@ -1,5 +1,6 @@
 package com.wildelake.frc.vision13.controls.compositions;
 
+
 /**
  * AndGateBooleanControl allows two buttons to be pressed at once and read
  * as a single, different button, but only if they are pressed at the same time
