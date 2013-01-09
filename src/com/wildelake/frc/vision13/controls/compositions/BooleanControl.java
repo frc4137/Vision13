@@ -35,9 +35,9 @@ public abstract class BooleanControl extends Control {
 	 * TODO make the compiler enforce this if possible
 	 */
 	protected void setValue(boolean value) {
-//		boolean oldValue = this.value;
+		boolean oldValue = this.value;
 		this.value = value;
-//		if (oldValue != value) triggerEvent(ON_CHANGE_EVENT);
+		if (oldValue != value) triggerEvent(ON_CHANGE_EVENT);
 	}
 	
 	protected final int ON_ENABLED_EVENT = 0;

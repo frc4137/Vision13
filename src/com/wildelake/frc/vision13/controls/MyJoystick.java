@@ -112,7 +112,7 @@ public class MyJoystick extends Joystick implements IInputOutput, Controller {
      * 1  = the button will always report being on
      * -1 = the button will always report being off
      */
-    private int[] m_buttons_status;
+//    private int[] m_buttons_status;
     
     public int getPortNumber() {
     	return m_port;
@@ -152,7 +152,7 @@ public class MyJoystick extends Joystick implements IInputOutput, Controller {
         m_ds = DriverStation.getInstance();
         m_axes = new byte[numAxisTypes];
         m_buttons = new byte[numButtonTypes];
-        m_buttons_status = new int[numButtonTypes];
+//        m_buttons_status = new int[numButtonTypes];
         m_port = port;
     }
 
@@ -290,12 +290,12 @@ public class MyJoystick extends Joystick implements IInputOutput, Controller {
      * @return The state of the button.
      */
     public boolean getRawButton(final int button) {
-    	switch (m_buttons_status[button]) {
-    	case 1:  return true;
-    	case -1: return false;
-    	default:
+//    	switch (m_buttons_status[button]) {
+//    	case 1:  return true;
+//    	case -1: return false;
+//    	default:
     		return ((0x1 << (button - 1)) & m_ds.getStickButtons(m_port)) != 0;
-    	}
+//    	}
     }
 
     /**

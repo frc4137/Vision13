@@ -21,6 +21,11 @@ public class Port {
 		JOY2X = 1,
 		JOY2Y = 2,
 		
-		FULL_SPEED_BTN = 0,
-		GRANNY_SPEED_BTN = 1;
+		FULL_SPEED_BTN = 5,
+		GRANNY_SPEED_BTN = 6,
+		
+		INC_SPEED_BTN = 7,
+		RST_SPEED_BTN = 9,
+		DEC_SPEED_BTN = 11,
+		SCALE_BTN = 10;
 }

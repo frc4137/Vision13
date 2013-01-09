@@ -35,6 +35,8 @@ public abstract class VariadicControl extends Control {
 	 * TODO make the compiler enforce this if possible
 	 */
 	protected void setValue(double value) {
+		value = Math.min(value, 1);
+		value = Math.max(value, -1);
 		this.value = value;
 	}
 	

@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.RobotDrive;
 
-import com.wildelake.frc.vision13.pilot.ManualPilot;
+import com.wildelake.frc.vision13.pilot.MechanicalPilot;
 import com.wildelake.frc.vision13.pilot.Pilot;
 import com.wildelake.frc.vision13.utils.*;
 
@@ -32,7 +32,7 @@ public class VisionIterative extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive);
+		manual = new MechanicalPilot(new MyJoystick(Port.JOYSTICK1), drive);
 	}
 
 	public void teleopPeriodic() {
