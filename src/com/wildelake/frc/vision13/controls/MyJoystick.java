@@ -371,22 +371,15 @@ public class MyJoystick extends Joystick implements IInputOutput, Controller {
     }
     
     /**
-     * Report ALL inputs.
-     */
-    public Object[] getAllInputs() {
-    	return new Object[]{getX(), getY(), m_buttons};
-    }
-    
-    /**
      * Report the input from the actual joystick
      * 
      * @param port Which joystick axis to report. 0 = x; 1 = y
      */
     public double getVariadicInput(int port) {
     	switch (port) {
-    	case 0:  return getX();
-    	case 1:  return getY();
-    	case 2:  return getTwist();
+    	case 1:  return getX();
+    	case 2:  return getY();
+    	case 3:  return getTwist();
     	default: throw new InvalidPortError("Variadic port specified does not exist.");
     	}
     }

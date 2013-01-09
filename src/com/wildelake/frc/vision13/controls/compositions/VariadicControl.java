@@ -1,13 +1,13 @@
 package com.wildelake.frc.vision13.controls.compositions;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * A standard event-based interface for composing and using variadic inputs
  */
 
 public abstract class VariadicControl extends Control {
-	private ArrayList<Listener> listeners = new ArrayList<Listener>();
+	private Vector listeners = new Vector();
 	private double value;
 	
 	public static class Listener {
@@ -45,7 +45,8 @@ public abstract class VariadicControl extends Control {
 	protected final int ALWAYS_EVENT = 3;
 	
 	protected void triggerEvent(int event) {
-		for (Listener listener : listeners) {
+		for (int i = 0; i < listeners.size(); i++) {
+			Listener listener = (Listener)listeners.elementAt(i);
 			switch (event) {
 			case WHILE_POSITIVE_EVENT: listener.whilePositive(value); break;
 			case WHILE_NEGATIVE_EVENT: listener.whileNegative(value); break;
@@ -62,6 +63,6 @@ public abstract class VariadicControl extends Control {
 	}
 	
 	public void addListener(Listener listener) {
-		listeners.add(listener);
+		listeners.addElement(listener);
 	}
 }

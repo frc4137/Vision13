@@ -6,13 +6,13 @@ package com.wildelake.frc.vision13;
  */
 public class Port {
 	public static int
-		FL_MOTOR = 0,
-		FR_MOTOR = 1,
-		BL_MOTOR = 2,
-		BR_MOTOR = 3,
+		FL_MOTOR = 1,
+		FR_MOTOR = 2,
+		BL_MOTOR = 3,
+		BR_MOTOR = 4,
 		
-		JOYSTICK1 = 0,
-		JOYSTICK2 = 1,
+		JOYSTICK1 = 1,
+		JOYSTICK2 = 2,
 		
 		JOY1X = 0,
 		JOY1Y = 1,

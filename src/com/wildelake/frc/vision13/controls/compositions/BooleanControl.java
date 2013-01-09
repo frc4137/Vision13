@@ -1,7 +1,6 @@
 package com.wildelake.frc.vision13.controls.compositions;
 
-import java.util.ArrayList;
-
+import java.util.Vector;
 
 /**
  * 
@@ -9,7 +8,7 @@ import java.util.ArrayList;
  *
  */
 public abstract class BooleanControl extends Control {
-	private ArrayList<Listener> listeners = new ArrayList<Listener>();
+	private Vector listeners = new Vector();
 	private boolean value;
 	
 	public static class Listener {
@@ -36,9 +35,9 @@ public abstract class BooleanControl extends Control {
 	 * TODO make the compiler enforce this if possible
 	 */
 	protected void setValue(boolean value) {
-		boolean oldValue = this.value;
+//		boolean oldValue = this.value;
 		this.value = value;
-		if (oldValue != value) triggerEvent(ON_CHANGE_EVENT);
+//		if (oldValue != value) triggerEvent(ON_CHANGE_EVENT);
 	}
 	
 	protected final int ON_ENABLED_EVENT = 0;
@@ -49,7 +48,8 @@ public abstract class BooleanControl extends Control {
 	protected final int ALWAYS_EVENT = 5;
 	
 	private void triggerEvent(int event) {
-		for (Listener listener : listeners) {
+		for (int i = 0; i < listeners.size(); i++) {
+			Listener listener = (Listener)listeners.elementAt(i);
 			switch (event) {
 			case ON_ENABLED_EVENT: listener.onEnabled(); break;
 			case ON_DISABLED_EVENT: listener.onDisabled(); break;
@@ -71,6 +71,6 @@ public abstract class BooleanControl extends Control {
 	}
 	
 	public void addListener(Listener listener) {
-		listeners.add(listener);
+		listeners.addElement(listener);
 	}
 }

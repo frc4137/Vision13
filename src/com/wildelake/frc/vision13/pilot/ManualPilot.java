@@ -4,13 +4,9 @@ import com.wildelake.frc.vision13.Port;
 import com.wildelake.frc.vision13.controls.BooleanInput;
 import com.wildelake.frc.vision13.controls.Controller;
 import com.wildelake.frc.vision13.controls.VariadicInput;
-import com.wildelake.frc.vision13.controls.compositions.BooleanControl;
-import com.wildelake.frc.vision13.controls.compositions.Control;
-import com.wildelake.frc.vision13.controls.compositions.ControlSet;
-import com.wildelake.frc.vision13.controls.compositions.MultiplyVariadicControl;
-import com.wildelake.frc.vision13.controls.compositions.ToggleMultiplyVariadicControl;
-import com.wildelake.frc.vision13.controls.compositions.VariadicControl;
+import com.wildelake.frc.vision13.controls.compositions.*;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 /**
@@ -19,7 +15,8 @@ import edu.wpi.first.wpilibj.RobotDrive;
 public class ManualPilot extends ControlSet implements Pilot {
 	private final Controller joystick1;
 	private final RobotDrive drive;
-	private VariadicControl joy1x, joy1y, joy1rot;
+	private VariadicControl joy1x, joy1y, joy1rot, foo;
+	private BooleanControl button;
 	
 	public ManualPilot(Controller joystick1, RobotDrive drive) {
 		this.joystick1 = joystick1;
@@ -28,7 +25,7 @@ public class ManualPilot extends ControlSet implements Pilot {
 		Control.buildControlSet(this);
 	}
 	
-	@Override
+	
 	public void buildControlSet() {
 		VariadicControl
 			joy1xRaw = new VariadicInput(joystick1, Port.JOY1X),
@@ -48,11 +45,14 @@ public class ManualPilot extends ControlSet implements Pilot {
 		// set up a button to quarter the input for even greater precision
 		joy1x = new ToggleMultiplyVariadicControl(grannySpeed, joy1x, 0.5);
 		joy1y = new ToggleMultiplyVariadicControl(grannySpeed, joy1y, 0.5);
+		
+		foo = new VariadicInput(joystick1, 0);
 	}
 	
-	@Override
+	
 	public void update() {
-		drive.mecanumDrive_Cartesian(joy1x.getValue(), joy1y.getValue(), joy1rot.getValue(), 0);
+//		drive.mecanumDrive_Cartesian(joy1x.getValue(), joy1y.getValue(), joy1rot.getValue(), 0);
+		drive.tankDrive(foo.getValue(), foo.getValue());
 	}
 
 }

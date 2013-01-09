@@ -234,54 +234,50 @@
     <end type="TARGET" refId="11" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="48">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="5"/>  
-  </realization>  
-  <generalization id="49">    
+  <generalization id="48">    
     <end type="SOURCE" refId="13"/>    
     <end type="TARGET" refId="7"/>  
   </generalization>  
-  <generalization id="50">    
+  <generalization id="49">    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="7"/>  
   </generalization>  
-  <generalization id="51">    
+  <generalization id="50">    
     <bendpoint x="2547" y="361"/>    
     <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="3"/>  
   </generalization>  
-  <association id="52">    
+  <association id="51">    
     <bendpoint x="2957" y="65"/>    
     <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="53" name="controller"/>      
-      <multiplicity id="54" minimum="0" maximum="1"/>    
+      <attribute id="52" name="controller"/>      
+      <multiplicity id="53" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="11" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="55">    
+  <association id="54">    
     <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="56" name="toggle">        
+      <attribute id="55" name="toggle">        
         <position height="15" width="41" x="2592" y="1050"/>      
       </attribute>      
-      <multiplicity id="57" minimum="0" maximum="1"/>    
+      <multiplicity id="56" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="58">    
+  <association id="57">    
     <bendpoint x="2388" y="402"/>    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="59" name="set">        
+      <attribute id="58" name="set">        
         <position height="15" width="23" x="2388" y="446"/>      
       </attribute>      
-      <multiplicity id="60" minimum="0" maximum="1"/>    
+      <multiplicity id="59" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="61">    
+  <generalization id="60">    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="9"/>  
   </generalization>  

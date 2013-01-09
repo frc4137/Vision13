@@ -13,27 +13,27 @@ public class CalibratedSpeedController implements SpeedController {
 		this.f = f;
 	}
 
-	@Override
+	
 	public void pidWrite(double output) {
 		scontrol.pidWrite(output);
 	}
 
-	@Override
+	
 	public double get() {
 		return scontrol.get();
 	}
 
-	@Override
+	
 	public void set(double speed, byte syncGroup) {
 		scontrol.set(f.of(speed), syncGroup);
 	}
 
-	@Override
+	
 	public void set(double speed) {
 		scontrol.set(f.of(speed));
 	}
 
-	@Override
+	
 	public void disable() {
 		scontrol.disable();
 	}

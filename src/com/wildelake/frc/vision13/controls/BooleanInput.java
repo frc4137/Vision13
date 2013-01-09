@@ -12,6 +12,7 @@ public class BooleanInput extends BooleanControl {
 	}
 	
 	public void update() {
-		setValue(controller.getBooleanInput(port));
+//		setValue(controller.getBooleanInput(port));
+		setValue(true);
 	}
 }

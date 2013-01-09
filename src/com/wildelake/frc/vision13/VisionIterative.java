@@ -12,6 +12,7 @@ import com.wildelake.frc.vision13.controls.MyJoystick;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 import com.wildelake.frc.vision13.pilot.ManualPilot;
@@ -29,10 +30,6 @@ public class VisionIterative extends IterativeRobot {
 			new CalibratedSpeedController(new Jaguar(Port.BL_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)),
 			new CalibratedSpeedController(new Jaguar(Port.BR_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0))
 		);
-	}
-
-	public void autonomousPeriodic() {
-
 	}
 
 	public void teleopInit() {

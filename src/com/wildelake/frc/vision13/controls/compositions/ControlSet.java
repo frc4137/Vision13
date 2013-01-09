@@ -1,20 +1,20 @@
 package com.wildelake.frc.vision13.controls.compositions;
 
-import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * ControlSet allows for creating multiple sets of controls which can be
  * switched between on the fly.
  */
 public abstract class ControlSet {
-	private final ArrayList<Control> registry = new ArrayList<Control>();
+	private final Vector registry = new Vector();
 	
 	protected void add(Control control) {
-		registry.add(control);
+		registry.addElement(control);
 	}
 	
 	public void tickAll() {
-		for (Control control : registry) control.tick();
+		for (int i = 0; i < registry.size(); i++) ((Control)registry.elementAt(i)).tick();
 	}
 	
 	public void tick() {
