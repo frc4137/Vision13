@@ -12,7 +12,6 @@ import com.wildelake.frc.vision13.controls.MyJoystick;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 import com.wildelake.frc.vision13.pilot.ManualPilot;

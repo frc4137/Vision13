@@ -14,12 +14,12 @@ public class Port {
 		JOYSTICK1 = 1,
 		JOYSTICK2 = 2,
 		
-		JOY1X = 0,
-		JOY1Y = 1,
-		JOY1ROT = 2,
+		JOY1X = 1,
+		JOY1Y = 2,
+		JOY1ROT = 3,
 		
-		JOY2X = 0,
-		JOY2Y = 1,
+		JOY2X = 1,
+		JOY2Y = 2,
 		
 		FULL_SPEED_BTN = 0,
 		GRANNY_SPEED_BTN = 1;

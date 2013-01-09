@@ -46,13 +46,13 @@ public class ManualPilot extends ControlSet implements Pilot {
 		joy1x = new ToggleMultiplyVariadicControl(grannySpeed, joy1x, 0.5);
 		joy1y = new ToggleMultiplyVariadicControl(grannySpeed, joy1y, 0.5);
 		
-		foo = new VariadicInput(joystick1, 0);
+		foo = new VariadicInput(joystick1, 1);
 	}
 	
 	
 	public void update() {
-//		drive.mecanumDrive_Cartesian(joy1x.getValue(), joy1y.getValue(), joy1rot.getValue(), 0);
-		drive.tankDrive(foo.getValue(), foo.getValue());
+		drive.mecanumDrive_Cartesian(joy1x.getValue(), joy1y.getValue(), joy1rot.getValue(), 0);
+//		drive.tankDrive(foo.getValue(), foo.getValue());
 	}
 
 }

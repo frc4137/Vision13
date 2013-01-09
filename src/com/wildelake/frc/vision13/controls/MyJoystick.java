@@ -373,7 +373,7 @@ public class MyJoystick extends Joystick implements IInputOutput, Controller {
     /**
      * Report the input from the actual joystick
      * 
-     * @param port Which joystick axis to report. 0 = x; 1 = y
+     * @param port Which joystick axis to report. 1 = x; 2 = y
      */
     public double getVariadicInput(int port) {
     	switch (port) {
