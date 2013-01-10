@@ -13,6 +13,7 @@ import com.wildelake.frc.vision13.controls.MyJoystick;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SpeedController;
 
 import com.wildelake.frc.vision13.pilot.MechanicalPilot;
 import com.wildelake.frc.vision13.pilot.Pilot;
@@ -21,18 +22,19 @@ import com.wildelake.frc.vision13.utils.*;
 public class VisionIterative extends IterativeRobot {
 	private RobotDrive drive;
 	private Pilot manual;
+	private SpeedController motor1, motor2;
 
 	public void robotInit() {
 		drive = new RobotDrive(
-			new CalibratedSpeedController(new Jaguar(Port.FL_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)),
-			new CalibratedSpeedController(new Jaguar(Port.FR_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)),
+			motor1 = new CalibratedSpeedController(new Jaguar(Port.FL_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)),
+			motor2 = new CalibratedSpeedController(new Jaguar(Port.FR_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)),
 			new CalibratedSpeedController(new Jaguar(Port.BL_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)),
 			new CalibratedSpeedController(new Jaguar(Port.BR_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0))
 		);
 	}
 
 	public void teleopInit() {
-		manual = new MechanicalPilot(new MyJoystick(Port.JOYSTICK1), drive);
+		manual = new MechanicalPilot(new MyJoystick(Port.JOYSTICK1), motor1, motor2);
 	}
 
 	public void teleopPeriodic() {

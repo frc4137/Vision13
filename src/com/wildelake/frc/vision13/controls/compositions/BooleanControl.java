@@ -37,7 +37,9 @@ public abstract class BooleanControl extends Control {
 	protected void setValue(boolean value) {
 		boolean oldValue = this.value;
 		this.value = value;
-		if (oldValue != value) triggerEvent(ON_CHANGE_EVENT);
+		if (oldValue != value) {
+			triggerEvent(ON_CHANGE_EVENT);
+		}
 	}
 	
 	protected final int ON_ENABLED_EVENT = 0;
@@ -49,22 +51,24 @@ public abstract class BooleanControl extends Control {
 	
 	private void triggerEvent(int event) {
 		for (int i = 0; i < listeners.size(); i++) {
-			Listener listener = (Listener)listeners.elementAt(i);
+			Listener listener = (Listener) listeners.elementAt(i);
 			switch (event) {
-			case ON_ENABLED_EVENT: listener.onEnabled(); break;
+			case ON_ENABLED_EVENT:
+				listener.onEnabled();
+				break;
 			case ON_DISABLED_EVENT: listener.onDisabled(); break;
 			case ON_CHANGE_EVENT:
 				listener.onChange(value);
 				if (value) listener.onEnabled();
 				else listener.onDisabled();
-			break;
+				break;
 			case WHILE_ENABLED_EVENT: listener.whileEnabled(); break;
 			case WHILE_DISABLED_EVENT: listener.whileDisabled(); break;
 			case ALWAYS_EVENT:
 				listener.always(value);
 				if (value) listener.whileEnabled();
 				else listener.whileDisabled();
-			break;
+				break;
 			default: throw new Error("Invalid event for Boolean Control");
 			}
 		}
