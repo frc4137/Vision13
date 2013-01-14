@@ -5,3 +5,4 @@ thumbs.db
 *.log
 logs/*
 .classpath
+*.class

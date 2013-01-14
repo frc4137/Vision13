@@ -1,14 +1,11 @@
 package com.wildelake.frc.vision13.pilot;
 
-import com.wildelake.frc.vision13.Port;
 import com.wildelake.frc.vision13.controls.BooleanInput;
 import com.wildelake.frc.vision13.controls.Controller;
-import com.wildelake.frc.vision13.controls.VariadicInput;
 import com.wildelake.frc.vision13.controls.compositions.*;
 
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 
 /**
@@ -51,7 +48,7 @@ public class MechanicalPilot extends ControlSet implements Pilot {
 	
 	
 	public void update() {
-		dsl.println(Line.kMain6, 1, "OK (Don't Press SPACEBAR to E-STOP)");
+		dsl.println(Line.kMain6, 1, "Don't Press SPACEBAR");
 		dsl.println(Line.kUser2, 1, "Current Speed: "+speed.getValue()+"                           ");
 		motor1.set(speed.getValue());
 		motor2.set(-speed.getValue());
