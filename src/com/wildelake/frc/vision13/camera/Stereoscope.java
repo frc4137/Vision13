@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.image.MonoImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
 import edu.wpi.first.wpilibj.image.RGBImage;
+import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
 
 /**
  * Manages two Cameras to allow for calculating the 3d position of targets.
@@ -35,7 +36,30 @@ public abstract class Stereoscope {
 		this.cc = cc;
 	}
 	
-	public abstract BinaryImage threshold(ColorImage img);
+	/**
+	 * This constructor is specialized for the 2013 robot's configuration using axis cameras
+	 */
+	public Stereoscope(Camera left, Camera right) {
+		CriteriaCollection cc = new CriteriaCollection();
+		cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
+		cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
+		this.left = left;
+		this.right = right;
+		this.distance = 61;
+		this.tanHalfAOV = Math.tan(Math.toRadians(47));
+		this.cc = cc;
+	}
+	
+	public abstract BinaryImage threshold(ColorImage img) throws NIVisionException;
+	
+	private BinaryImage safeThreshold(ColorImage img) {
+		try {
+			return threshold(img);
+		}
+		catch (NIVisionException e) {
+			return null;
+		}
+	}
 	
 	/**
 	 * recalculate the leftReports and rightReports variables
@@ -52,9 +76,9 @@ public abstract class Stereoscope {
 		ColorImage image = null;
 		BinaryImage thresholdImage = null, bigObjectsImage = null, convexHullImage = null, filteredImage = null;
 		try {
-			// Thanks to WPILIBJ authors. Much of this is copied from sample code bundled with the library.
+			// Thanks to WPILIBJ authors. Much of this is copied from sample code.
 			image = cam.getImage();
-			thresholdImage = threshold(image);
+			thresholdImage = safeThreshold(image);
 			bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);
 			convexHullImage = bigObjectsImage.convexHull(false);
 			filteredImage = convexHullImage.particleFilter(cc);
@@ -91,6 +115,9 @@ public abstract class Stereoscope {
 		}
 	}
 	
+	/**
+	 * This returns the number of centimeters (parallel to the center of the field of view) to the target.
+	 */
 	public double getDepth() {
 		// Thanks to Edwin Tjandranegara (Purdue University) for "Distance Estimation Algorithm for Stereo Pair Images" (2005).
 		double pixelWidth = 640/2; // TODO generalize this, currently it only works for images which are 640 pixels wide
@@ -107,6 +134,21 @@ public abstract class Stereoscope {
 				Math.tan(Math.PI/2 - a[1])
 		};
 		return (b[0] * b[1] * distance) / (b[0] + b[1]);
+	}
+	
+	/**
+	 * Unlike getDepth, this returns a double in the range [-1.0, 1.0]
+	 */
+	public double getX() {
+		return (rightReports[0].center_mass_x_normalized + leftReports[0].center_mass_x_normalized) / 2;
+	}
+	
+	/**
+	 * Unlike getDepth, this returns a double in the range [-1.0, 1.0]
+	 */
+	public double getY() {
+		// technically both the masses should be about the same, but this should help make it more accurate
+		return (rightReports[0].center_mass_y_normalized + leftReports[0].center_mass_y_normalized) / 2;
 	}
 	
 	public ColorImage getAnaglyph() throws NIVisionException {
