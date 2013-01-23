@@ -11,6 +11,10 @@ public final class Config {
 	 */
 	private static boolean marchOn;
 	public static boolean getMarchOn() { return marchOn; }
+	private static double ramp = 0.01;
+	public static double getRamp() {
+		return ramp;
+	}
 	
 	public static void development() {
 		if (configured) return;
@@ -25,4 +29,6 @@ public final class Config {
 		
 		marchOn = true;
 	}
+
+
 }

@@ -34,6 +34,7 @@ public abstract class Stereoscope {
 		this.distance = distance;
 		this.tanHalfAOV = Math.tan(halfAOV);
 		this.cc = cc;
+		refresh();
 	}
 	
 	/**
@@ -48,6 +49,7 @@ public abstract class Stereoscope {
 		this.distance = 61;
 		this.tanHalfAOV = Math.tan(Math.toRadians(47));
 		this.cc = cc;
+		refresh();
 	}
 	
 	public abstract BinaryImage threshold(ColorImage img) throws NIVisionException;
@@ -119,6 +121,8 @@ public abstract class Stereoscope {
 	 * This returns the number of centimeters (parallel to the center of the field of view) to the target.
 	 */
 	public double getDepth() {
+		if (rightReports.length == 0 || leftReports.length == 0)
+			return -1.0;
 		// Thanks to Edwin Tjandranegara (Purdue University) for "Distance Estimation Algorithm for Stereo Pair Images" (2005).
 		double pixelWidth = 640/2; // TODO generalize this, currently it only works for images which are 640 pixels wide
 		double[] a = {

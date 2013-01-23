@@ -36,7 +36,7 @@ public class SemiManualPilot extends ControlSet implements Pilot {
 		dsl = DriverStationLCD.getInstance();
 		targetor = new Stereoscope(new MyAxisCamera(AxisCamera.getInstance("10.41.37.11")), new MyAxisCamera(AxisCamera.getInstance("10.41.37.12"))) {
 			public BinaryImage threshold(ColorImage img) throws NIVisionException {
-				 return img.thresholdHSL(25, 255, 0, 45, 0, 47);
+				return img.thresholdHSL(25, 255, 0, 45, 0, 47);
 			}
 		};
 	}
