@@ -25,7 +25,7 @@ public class CalibratedSpeedController implements SpeedController {
 
 	
 	public void set(double speed, byte syncGroup) {
-		scontrol.set(f.of(speed), syncGroup);
+		set(speed);
 	}
 
 	

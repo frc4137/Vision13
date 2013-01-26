@@ -1,7 +1,5 @@
 package com.wildelake.frc.vision13.components;
 
-import com.wildelake.frc.vision13.utils.Function;
-
 import edu.wpi.first.wpilibj.SpeedController;
 
 public class RampedSpeedController implements SpeedController {
@@ -25,13 +23,12 @@ public class RampedSpeedController implements SpeedController {
 
 	
 	public void set(double speed, byte syncGroup) {
-		this.set(speed); // TODO handle this deprecated shit properly
+		set(speed);
 	}
 
 	
 	public void set(double speed) {
 		double difference = Math.min(deltav, Math.abs(scontrol.get() - speed));
-		System.out.println(speed + " " + difference);
 		scontrol.set(scontrol.get() > speed ? get() - difference : get() + difference);
 	}
 

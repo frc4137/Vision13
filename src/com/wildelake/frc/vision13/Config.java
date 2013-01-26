@@ -11,7 +11,7 @@ public final class Config {
 	 */
 	private static boolean marchOn;
 	public static boolean getMarchOn() { return marchOn; }
-	private static double ramp = 0.01;
+	private static double ramp = 0.05;
 	public static double getRamp() {
 		return ramp;
 	}

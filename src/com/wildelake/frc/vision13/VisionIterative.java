@@ -34,12 +34,23 @@ public class VisionIterative extends IterativeRobot {
 	private SpeedController fireMotor;
 
 	public void robotInit() {
-		drive = new RobotDrive(
-			new RampedSpeedController(new CalibratedSpeedController(new Jaguar(Port.BL_MOTOR), Function.calibrator(0, -1, 0, 0, -1, 0)), Config.getRamp()),
-			new RampedSpeedController(new CalibratedSpeedController(new Jaguar(Port.BR_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)), Config.getRamp()),
-			new RampedSpeedController(new CalibratedSpeedController(new Jaguar(Port.FL_MOTOR), Function.calibrator(0, -1, 0, 0, -1, 0)), Config.getRamp()),
-			new RampedSpeedController(new CalibratedSpeedController(new Jaguar(Port.FR_MOTOR), Function.calibrator(0, 1, 0, 0, 1, 0)), Config.getRamp())
-		);
+		SpeedController[] driveMotors = new SpeedController[] {
+			new Jaguar(Port.BL_MOTOR),
+			new Jaguar(Port.BR_MOTOR),
+			new Jaguar(Port.FL_MOTOR),
+			new Jaguar(Port.FR_MOTOR)
+		};
+		Function[] calibrators = new Function[] {
+			Function.calibrator(0, -1, 0, 0, -1, 0), // Back Left
+			Function.calibrator(0, 1, 0, 0, 1, 0), // Back Right
+			Function.calibrator(0, -1, 0, 0, -1, 0), // Front Left
+			Function.calibrator(0, 1, 0, 0, 1, 0) // Front Right
+		};
+		for (int i = 0; i < 4; i++) {
+			driveMotors[i] = new RampedSpeedController(driveMotors[i], Config.getRamp());
+			driveMotors[i] = new CalibratedSpeedController(driveMotors[i], calibrators[i]);
+		}
+		drive = new RobotDrive(driveMotors[0], driveMotors[1], driveMotors[2], driveMotors[3]);
 		fireMotor = new Jaguar(Port.FIRE_MOTOR);
 	}
 

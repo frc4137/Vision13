@@ -57,20 +57,19 @@ public class ManualPilot extends ControlSet implements Pilot {
 		
 		// Fire button
 		fire = new BooleanVariadicControl(
-					new ToggleBooleanControl(
-						new BooleanInput(joystick1, Port.FIRE_BTN)
-					),
-					0,
-					1.0
-				);
+			new ToggleBooleanControl(
+				new BooleanInput(joystick1, Port.FIRE_BTN)),
+			0,
+			-1.0);
 	}
 	
 	
 	public void update() {
-		dsl.println(Line.kMain6, 1, "Don't SPACEBAR");
+		dsl.println(Line.kMain6, 1, "Don't SPACEBRO");
 		dsl.println(Line.kUser2, 1, "JoyStick 1 X: "+joy1x.getValue());
 		dsl.println(Line.kUser3, 1, "JoyStick 1 Y: "+joy1y.getValue());
 		dsl.println(Line.kUser4, 1, "JoyStick 1 r: " + joy1rot.getValue());
+		dsl.println(Line.kUser5, 1, String.valueOf(fire.getValue()));
 		drive.mecanumDrive_Cartesian(joy1x.getValue(), joy1y.getValue(), joy1rot.getValue(), 0);
 		fireMotor.set(fire.getValue());
 		dsl.updateLCD();
