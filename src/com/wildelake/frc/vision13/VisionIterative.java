@@ -7,6 +7,7 @@
 
 package com.wildelake.frc.vision13;
 
+import com.wildelake.frc.vision13.Port;
 import com.wildelake.frc.vision13.camera.MyAxisCamera;
 import com.wildelake.frc.vision13.camera.Stereoscope;
 import com.wildelake.frc.vision13.components.*;
@@ -55,7 +56,7 @@ public class VisionIterative extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-//		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
+		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
 		manual = new CameraTestPilot(new Stereoscope(new MyAxisCamera(AxisCamera.getInstance("10.41.37.11")), new MyAxisCamera(AxisCamera.getInstance("10.41.37.12"))) {
 			public BinaryImage threshold(ColorImage img)
 					throws NIVisionException {
@@ -67,6 +68,7 @@ public class VisionIterative extends IterativeRobot {
 //				return img.thresholdHSL(25, 255, 0, 45, 0, 47);
 			}
 		});
+		manual = new CalibrationPilot(new MyJoystick(Port.JOYSTICK1), driveMotors);
 	}
 
 	public void teleopPeriodic() {

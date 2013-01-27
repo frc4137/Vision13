@@ -25,7 +25,7 @@ public abstract class VariadicControl extends Control {
 		triggerEvent(ALWAYS_EVENT);
 	}
 	
-	public abstract void update();
+	public void update() {}
 	
 	public double getValue() {
 		return value;
