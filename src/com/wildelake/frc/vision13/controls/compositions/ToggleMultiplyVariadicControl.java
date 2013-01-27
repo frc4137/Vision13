@@ -1,7 +1,7 @@
 package com.wildelake.frc.vision13.controls.compositions;
 
 /**
- * ToggleDoubleVariadicControl is used to double the input from a variadic control while
+ * ToggleMultiplyVariadicControl is used to multiply the input from a VariadicControl while
  * a specified button is being pressed
  *
  */

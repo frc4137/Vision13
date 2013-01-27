@@ -22,8 +22,8 @@ import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 
-//import com.wildelake.frc.vision13.pilot.CameraTestPilot;
-import com.wildelake.frc.vision13.pilot.ManualPilot;
+import com.wildelake.frc.vision13.pilot.CameraTestPilot;
+//import com.wildelake.frc.vision13.pilot.ManualPilot;
 //import com.wildelake.frc.vision13.pilot.MechanicalPilot;
 import com.wildelake.frc.vision13.pilot.Pilot;
 import com.wildelake.frc.vision13.utils.*;
@@ -55,18 +55,18 @@ public class VisionIterative extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
-//		manual = new CameraTestPilot(new Stereoscope(new MyAxisCamera(AxisCamera.getInstance("10.41.37.11")), new MyAxisCamera(AxisCamera.getInstance("10.41.37.12"))) {
-//			public BinaryImage threshold(ColorImage img)
-//					throws NIVisionException {
-//				if (img == null) {
-//					System.out.println("NULL");
-//					return null;
-//				}
-//				return img.thresholdHSL(76, 210, 3, 160, 170, 255);
+//		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
+		manual = new CameraTestPilot(new Stereoscope(new MyAxisCamera(AxisCamera.getInstance("10.41.37.11")), new MyAxisCamera(AxisCamera.getInstance("10.41.37.12"))) {
+			public BinaryImage threshold(ColorImage img)
+					throws NIVisionException {
+				if (img == null) {
+					System.out.println("NULL");
+					return null;
+				}
+				return img.thresholdHSL(76, 210, 3, 160, 170, 255);
 //				return img.thresholdHSL(25, 255, 0, 45, 0, 47);
-//			}
-//		});
+			}
+		});
 	}
 
 	public void teleopPeriodic() {
