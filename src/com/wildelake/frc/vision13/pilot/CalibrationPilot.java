@@ -1,14 +1,10 @@
 package com.wildelake.frc.vision13.pilot;
 
-import com.wildelake.frc.vision13.Port;
 import com.wildelake.frc.vision13.controls.BooleanInput;
 import com.wildelake.frc.vision13.controls.Controller;
-import com.wildelake.frc.vision13.controls.VariadicInput;
 import com.wildelake.frc.vision13.controls.compositions.*;
-
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 
 /**
@@ -59,10 +55,8 @@ public class CalibrationPilot extends ControlSet implements Pilot {
 	public void update() {
 		dsl.println(Line.kMain6, 1, "Don't SPACEBRO");
 		dsl.println(Line.kUser2, 1, "Speed: "+speed.getValue());
+		System.out.println("Speed: " + speed.getValue());
 		motors[currMotor[0]].set(speed.getValue());
-		// fireMotor.set(fire.getValue());
-		dsl.updateLCD();
-//		drive.tankDrive(foo.getValue(), foo.getValue());
 	}
 
 }
