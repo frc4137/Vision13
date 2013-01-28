@@ -17,11 +17,12 @@ public class OrGateBooleanControl extends BooleanControl {
 	}
 	
 	public void update() {
-		setValue(false);
+		boolean value = false;
 		for (int i = 0; i < buttons.length; i++)
-			if (buttons[i].getValue()) {
-				setValue(true);
-				break;
-			}
+		if (buttons[i].getValue()) {
+			value = true;
+			break;
+		}
+		setValue(value);
 	}
 }

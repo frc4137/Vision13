@@ -41,10 +41,10 @@ public class VisionIterative extends IterativeRobot {
 			new Jaguar(Port.FR_MOTOR)
 		};
 		Function[] calibrators = new Function[] {
-			Function.calibrator(0, -1, 0, 0, -1, 0), // Back Left
-			Function.calibrator(0, 1, 0, 0, 1, 0), // Back Right
-			Function.calibrator(0, -1, 0, 0, -1, 0), // Front Left
-			Function.calibrator(0, 1, 0, 0, 1, 0) // Front Right
+			Function.calibrator( 0.006, -1.052,  0.053,  0.004, -1.033,  0.070), // Back Left
+			Function.calibrator(-0.005,  1.031, -0.083, -0.005,  1.041, -0.066), // Back Right
+			Function.calibrator( 0.006, -1.062,  0.120,  0.004, -1.028,  0.079), // Front Left
+			Function.calibrator(-0.004,  1.031, -0.089, -0.005,  1.046, -0.082)  // Front Right
 		};
 		for (int i = 0; i < 4; i++) {
 			driveMotors[i] = new RampedSpeedController(driveMotors[i], Config.getRamp());
@@ -55,7 +55,7 @@ public class VisionIterative extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-//		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
+		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
 //		manual = new CameraTestPilot(new Stereoscope(new MyAxisCamera(AxisCamera.getInstance("10.41.37.11")), new MyAxisCamera(AxisCamera.getInstance("10.41.37.12"))) {
 //			public BinaryImage threshold(ColorImage img)
 //					throws NIVisionException {
@@ -67,7 +67,7 @@ public class VisionIterative extends IterativeRobot {
 ////				return img.thresholdHSL(25, 255, 0, 45, 0, 47);
 //			}
 //		});
-		manual = new CalibrationPilot(new MyJoystick(Port.JOYSTICK1), driveMotors);
+//		manual = new CalibrationPilot(new MyJoystick(Port.JOYSTICK1), driveMotors);
 	}
 
 	public void teleopPeriodic() {

@@ -28,7 +28,7 @@ public class CalibrationPilot extends ControlSet implements Pilot {
 	
 	public void buildControlSet() {
 		speed = new ToggleMultiplyVariadicControl(
-			new BooleanInput(joystick1, 12),
+			new ToggleBooleanControl(new BooleanInput(joystick1, 12)),
 			new RadioVariadicControl(
 				new BooleanControl[] {
 					new BooleanInput(joystick1, 7),
@@ -37,16 +37,16 @@ public class CalibrationPilot extends ControlSet implements Pilot {
 					new BooleanInput(joystick1, 11)},
 				new double[] {1, .5, .25, 0}),
 			-1);
-		new OrGateBooleanControl(
+		new ToggleBooleanControl(new OrGateBooleanControl(
 			new BooleanControl[] {
 				new BooleanInput(joystick1, 3),
 				new BooleanInput(joystick1, 4),
 				new BooleanInput(joystick1, 5),
-				new BooleanInput(joystick1, 6)})
+				new BooleanInput(joystick1, 6)}))
 		.addListener(new BooleanControl.Listener() {
-				public void onEnabled() {
+				public void onChange(boolean value) {
 				currMotor[0]++;
-				if (currMotor[0] > motors.length) currMotor[0] = 0;
+				if (currMotor[0] >= motors.length) currMotor[0] = 0;
 			}
 		});
 	}
@@ -54,8 +54,10 @@ public class CalibrationPilot extends ControlSet implements Pilot {
 	
 	public void update() {
 		dsl.println(Line.kMain6, 1, "Don't SPACEBRO");
-		dsl.println(Line.kUser2, 1, "Speed: "+speed.getValue());
-		System.out.println("Speed: " + speed.getValue());
+		dsl.println(Line.kUser2, 1, "Speed: "+speed.getValue()+"  ");
+		dsl.println(Line.kUser3, 1, "Current Motor: "+(currMotor[0]+1)+"  ");
+		dsl.updateLCD();
+//		System.out.println("Speed: " + speed.getValue());
 		motors[currMotor[0]].set(speed.getValue());
 	}
 
