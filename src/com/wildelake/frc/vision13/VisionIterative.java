@@ -46,7 +46,7 @@ public class VisionIterative extends IterativeRobot {
 			Function.calibrator( 0.006, -1.062,  0.120,  0.004, -1.028,  0.079), // Front Left
 			Function.calibrator(-0.004,  1.031, -0.089, -0.005,  1.046, -0.082)  // Front Right
 		};
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < driveMotors.length; i++) {
 			driveMotors[i] = new RampedSpeedController(driveMotors[i], Config.getRamp());
 			driveMotors[i] = new CalibratedSpeedController(driveMotors[i], calibrators[i]);
 		}
@@ -55,18 +55,21 @@ public class VisionIterative extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
-//		manual = new CameraTestPilot(new Stereoscope(new MyAxisCamera(AxisCamera.getInstance("10.41.37.11")), new MyAxisCamera(AxisCamera.getInstance("10.41.37.12"))) {
-//			public BinaryImage threshold(ColorImage img)
-//					throws NIVisionException {
-//				if (img == null) {
-//					System.out.println("NULL");
-//					return null;
-//				}
-//				return img.thresholdHSL(76, 210, 3, 160, 170, 255);
-////				return img.thresholdHSL(25, 255, 0, 45, 0, 47);
-//			}
-//		});
+//		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
+		manual = new CameraTestPilot(
+				new Stereoscope(
+					new MyAxisCamera(AxisCamera.getInstance("10.41.37.11")),
+					new MyAxisCamera(AxisCamera.getInstance("10.41.37.12"))) {
+			public BinaryImage threshold(ColorImage img)
+					throws NIVisionException {
+				if (img == null) {
+					System.out.println("NULL");
+					return null;
+				}
+				return img.thresholdHSL(76, 210, 3, 160, 170, 255);
+//				return img.thresholdHSL(25, 255, 0, 45, 0, 47);
+			}
+		});
 //		manual = new CalibrationPilot(new MyJoystick(Port.JOYSTICK1), driveMotors);
 	}
 

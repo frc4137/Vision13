@@ -6,13 +6,8 @@ package com.wildelake.frc.vision13.controls.compositions;
  *
  */
 public class ToggleBooleanControl extends BooleanControl {
-	private final BooleanControl button;
-	private final boolean[] state;
-	
 	public ToggleBooleanControl(BooleanControl button) {
-		this.state = new boolean[] {false};
-		this.button = button;
-//		state = button.getValue();
+		final boolean[] state = {false};
 		button.addListener(new BooleanControl.Listener() {
 			public void onEnabled() {
 				state[0] = !state[0];
@@ -20,6 +15,4 @@ public class ToggleBooleanControl extends BooleanControl {
 			}
 		});
 	}
-	
-	public void update() {}
 }

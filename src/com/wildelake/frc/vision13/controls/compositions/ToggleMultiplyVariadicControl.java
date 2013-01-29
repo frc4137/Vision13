@@ -17,12 +17,6 @@ public class ToggleMultiplyVariadicControl extends VariadicControl {
 	}
 	
 	public void update() {
-		double result = source.getValue();
-		if (toggle.getValue()) {
-			result *= multiplier;
-			result = Math.min(1.0, result);
-			result = Math.max(-1.0, result);
-		}
-		setValue(result);
+		setValue(toggle.getValue() ? source.getValue() * multiplier : source.getValue());
 	}
 }

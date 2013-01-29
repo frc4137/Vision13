@@ -32,22 +32,20 @@ public class ManualPilot extends ControlSet implements Pilot {
 	
 	
 	public void buildControlSet() {
+		// setup the driving joystick (1)
 		VariadicControl
 			joy1xRaw = new VariadicInput(joystick1, Port.JOY1X),
 			joy1yRaw = new VariadicInput(joystick1, Port.JOY1Y);
-		VariadicControl
-			joy1xRamp = new RampedVariadicControl(joy1xRaw, 0.05),
-			joy1yRamp = new RampedVariadicControl(joy1yRaw, 0.05);
+		joy1rot = new VariadicInput(joystick1, Port.JOY1ROT);
+		
 		BooleanControl
 			fullSpeed   = new BooleanInput(joystick1, Port.FULL_SPEED_BTN),
 			grannySpeed = new BooleanInput(joystick1, Port.GRANNY_SPEED_BTN);
 		
-		// setup the driving joystick (1)
-		joy1rot = new VariadicInput(joystick1, Port.JOY1ROT);
 		
 		// make the input from the joystick halved by default
-		joy1x = new MultiplyVariadicControl(joy1xRamp, 0.5);
-		joy1y = new MultiplyVariadicControl(joy1yRamp, 0.5);
+		joy1x = new MultiplyVariadicControl(joy1xRaw, 0.5);
+		joy1y = new MultiplyVariadicControl(joy1yRaw, 0.5);
 		// set up a button to return it to full speed
 		joy1x = new ToggleMultiplyVariadicControl(fullSpeed, joy1x, 2.0);
 		joy1y = new ToggleMultiplyVariadicControl(fullSpeed, joy1y, 2.0);
@@ -58,7 +56,8 @@ public class ManualPilot extends ControlSet implements Pilot {
 		// Fire button
 		fire = new BooleanVariadicControl(
 			new ToggleBooleanControl(
-				new BooleanInput(joystick1, Port.FIRE_BTN)),
+				new BooleanInput(joystick1, Port.FIRE_BTN)
+				),
 			0,
 			-1.0);
 	}
@@ -73,7 +72,6 @@ public class ManualPilot extends ControlSet implements Pilot {
 		drive.mecanumDrive_Cartesian(joy1x.getValue(), joy1y.getValue(), joy1rot.getValue(), 0);
 		fireMotor.set(fire.getValue());
 		dsl.updateLCD();
-//		drive.tankDrive(foo.getValue(), foo.getValue());
 	}
 
 }

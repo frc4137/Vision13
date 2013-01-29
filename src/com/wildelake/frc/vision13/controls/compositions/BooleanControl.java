@@ -25,7 +25,7 @@ public abstract class BooleanControl extends Control {
 		triggerEvent(ALWAYS_EVENT);
 	}
 	
-	public abstract void update();
+	public void update() {};
 	
 	public boolean getValue() {
 		return value;
