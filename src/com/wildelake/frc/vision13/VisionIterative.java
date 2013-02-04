@@ -52,25 +52,22 @@ public class VisionIterative extends IterativeRobot {
 		}
 		drive = new RobotDrive(driveMotors[0], driveMotors[1], driveMotors[2], driveMotors[3]);
 		fireMotor = new Jaguar(Port.FIRE_MOTOR);
-	}
-
-	public void teleopInit() {
-//		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
-		manual = new CameraTestPilot(
-				new Stereoscope(
-					new MyAxisCamera(AxisCamera.getInstance("10.41.37.11")),
-					new MyAxisCamera(AxisCamera.getInstance("10.41.37.12"))) {
-			public BinaryImage threshold(ColorImage img)
-					throws NIVisionException {
-				if (img == null) {
-					System.out.println("NULL");
-					return null;
+		
+		Camera left  = new MyAxisCamera(AxisCamera.getInstance("10.41.37.12"));
+		Camera right = new MyAxisCamera(AxisCamera.getInstance("10.41.37.11"));
+		
+		manual = new CameraTestPilot(,
+			new MyJoystick(Port.JOYSTICK1),
+			new Stereoscope(left, right) {
+				public BinaryImage threshold(ColorImage img) throws NIVisionException {
+					if (img == null) {
+						System.out.println("NULL");
+						return null;
+					}
+					return img.thresholdHSL(88, 198, 33, 186, 167, 255); // ring lights
+//					return img.thresholdHSL(25, 255, 0, 45, 0, 47);      // plagiarized 
 				}
-				return img.thresholdHSL(76, 210, 3, 160, 170, 255);
-//				return img.thresholdHSL(25, 255, 0, 45, 0, 47);
-			}
-		});
-//		manual = new CalibrationPilot(new MyJoystick(Port.JOYSTICK1), driveMotors);
+			});
 	}
 
 	public void teleopPeriodic() {

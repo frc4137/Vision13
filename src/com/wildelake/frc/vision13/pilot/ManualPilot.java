@@ -54,12 +54,14 @@ public class ManualPilot extends ControlSet implements Pilot {
 		joy1y = new ToggleMultiplyVariadicControl(grannySpeed, joy1y, 0.5);
 		
 		// Fire button
-		fire = new BooleanVariadicControl(
-			new ToggleBooleanControl(
-				new BooleanInput(joystick1, Port.FIRE_BTN)
-				),
-			0,
-			-1.0);
+		fire = new ToggleMultiplyVariadicControl(
+			new ToggleBooleanControl(new BooleanInput(joystick1, 8)),
+			new BooleanVariadicControl(
+				new ToggleBooleanControl(
+					new BooleanInput(joystick1, Port.FIRE_BTN)),
+				0,
+				1.0),
+			-1);
 	}
 	
 	

@@ -14,7 +14,7 @@ public abstract class ControlSet {
 	}
 	
 	public void tickAll() {
-		for (int i = 0; i < registry.size(); i++) ((Control)registry.elementAt(i)).tick();
+		for (int i = 0; i < registry.size(); i++) ((Control) registry.elementAt(i)).tick();
 	}
 	
 	public void tick() {

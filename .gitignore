@@ -6,3 +6,4 @@ thumbs.db
 logs/*
 .classpath
 *.class
+/nbproject/private/

@@ -1,5 +1,7 @@
 package com.wildelake.frc.vision13.camera;
 
+import java.util.Vector;
+
 import com.wildelake.frc.vision13.Config;
 import com.wildelake.frc.vision13.utils.MoreMath;
 
@@ -23,10 +25,11 @@ import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
  *     }
  */
 public abstract class Stereoscope {
-	private final Camera left, right;
+	public final Camera left, right;
 	private final double distance, tanHalfAOV;
 	private final CriteriaCollection cc;
 	private ParticleAnalysisReport[] leftReports, rightReports;
+	private boolean archiveNextRefresh = false;
 
 	public Stereoscope(Camera left, Camera right, double distance, double halfAOV, CriteriaCollection cc) {
 		this.left = left;
@@ -46,7 +49,7 @@ public abstract class Stereoscope {
 		cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
 		this.left = left;
 		this.right = right;
-		this.distance = 61;
+		this.distance = 33+3/16;
 		this.tanHalfAOV = Math.tan(Math.toRadians(47));
 		this.cc = cc;
 		refresh();
@@ -67,23 +70,35 @@ public abstract class Stereoscope {
 	 * recalculate the leftReports and rightReports variables
 	 */
 	public void refresh() {
-		try { leftReports = refreshSide(left); }
+		try { leftReports = refreshSide(left, archiveNextRefresh, "/tmp/left_"); }
 		catch (NIVisionException e) { e.printStackTrace(); }
 		
-		try { rightReports = refreshSide(right); }
+		try { rightReports = refreshSide(right, archiveNextRefresh, "/tmp/right_"); }
 		catch (NIVisionException e) { e.printStackTrace(); }
+		
+		archiveNextRefresh = false;
 	}
 	
-	private ParticleAnalysisReport[] refreshSide(Camera cam) throws NIVisionException {
+	private ParticleAnalysisReport[] refreshSide(Camera cam, boolean shouldArchive, String prefix) throws NIVisionException {
 		ColorImage image = null;
 		BinaryImage thresholdImage = null, bigObjectsImage = null, convexHullImage = null, filteredImage = null;
+		boolean connectivity8 = true;
 		try {
 			// Thanks to WPILIBJ authors. Much of this is copied from sample code.
 			image = cam.getImage();
 			thresholdImage = safeThreshold(image);
-			bigObjectsImage = thresholdImage.removeSmallObjects(false, 2);
-			convexHullImage = bigObjectsImage.convexHull(false);
+			bigObjectsImage = thresholdImage.removeSmallObjects(connectivity8, 2);
+			convexHullImage = bigObjectsImage.convexHull(connectivity8);
 			filteredImage = convexHullImage.particleFilter(cc);
+			
+			if (shouldArchive) {
+				System.out.println(prefix);
+				image          .write(prefix + "original.png");
+				thresholdImage .write(prefix + "thresholded.png");
+				bigObjectsImage.write(prefix + "big_objects.png");
+				convexHullImage.write(prefix + "convex_hull.png");
+				filteredImage  .write(prefix + "filtered.png");
+			}
 	
 			return filteredImage.getOrderedParticleAnalysisReports();
 		}
@@ -109,19 +124,23 @@ public abstract class Stereoscope {
 	public void debugReports() {
 		for (int i = 0; i < leftReports.length; i++) {
 			ParticleAnalysisReport r = leftReports[i];
-			System.out.println("(Left)  Particle: " + i + ":  Center of mass x: " + r.center_mass_x);
+			System.out.println("(Left)  Particle: " + i + ",  Center of mass x: " + r.center_mass_x + ",  Center of mass y: " + r.center_mass_y);
 		}
 		for (int i = 0; i < rightReports.length; i++) {
 			ParticleAnalysisReport r = rightReports[i];
-			System.out.println("(Right) Particle: " + i + ":  Center of mass x: " + r.center_mass_x);
+			System.out.println("(Right)  Particle: " + i + ",  Center of mass x: " + r.center_mass_x + ",  Center of mass y: " + r.center_mass_y);
 		}
+	}
+	
+	public void archivePhotos() {
+		archiveNextRefresh = true;
 	}
 	
 	/**
 	 * This returns the number of centimeters (parallel to the center of the field of view) to the target.
 	 */
 	public double getDepth() {
-		if (rightReports.length == 0 || leftReports.length == 0)
+		if (rightReports.length + leftReports.length <= 1)
 			return -1.0;
 		// Thanks to Edwin Tjandranegara (Purdue University) for "Distance Estimation Algorithm for Stereo Pair Images" (2005).
 		double pixelWidth = 640/2; // TODO generalize this, currently it only works for images which are 640 pixels wide

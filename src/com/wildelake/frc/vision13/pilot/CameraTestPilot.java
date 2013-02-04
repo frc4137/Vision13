@@ -8,30 +8,52 @@ import com.wildelake.frc.vision13.controls.compositions.*;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.image.NIVisionException;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * CameraTestPilot shows range from a SScope on the DSL
  */
-public class CameraTestPilot implements Pilot {
+public class CameraTestPilot extends ControlSet implements Pilot {
 	private final Stereoscope sscope;
 	private DriverStationLCD dsl;
 	private int time;
+	private BooleanControl archive;
+	private Controller joystick1;
 	
-	public CameraTestPilot(Stereoscope sscope) {
+	public CameraTestPilot(Controller joystick1, Stereoscope sscope) {
 		this.sscope = sscope;
+		this.joystick1 = joystick1;
 		dsl = DriverStationLCD.getInstance();
 		time = 0;
-	}	
+		Control.buildControlSet(this);
+	}
 	
-	public void tick() {
-		if (time % 10 == 0) sscope.refresh();
+	public void buildControlSet() {
+		archive = new ToggleBooleanControl(
+			new OrGateBooleanControl(new BooleanControl[] {
+				new BooleanInput(joystick1, 2),
+				new BooleanInput(joystick1, 3),
+				new BooleanInput(joystick1, 4),
+				new BooleanInput(joystick1, 5)}));
+	}
+	
+	public void update() {
+		if (time % 30 == 0) {
+			sscope.refresh();
+			SmartDashboard.putString("anaFeed", sscope.left.getImage().toString());
+		}
 		time++;
-		dsl.println(Line.kMain6, 1, "Don't Press SPACEBAR");
+		dsl.println(Line.kMain6, 1, "Don't Press SPACEBRO");
 		System.out.println(sscope.getDepth());
 		sscope.debugReports();
+		if (archive.getValue()) {
+			System.out.println("Pilot");
+			sscope.archivePhotos();
+		}
 		dsl.println(Line.kUser2, 1, "Current Range: "+sscope.getDepth()+"                           ");
+		dsl.println(Line.kUser3, 1, String.valueOf(sscope.left == sscope.right));
 		dsl.updateLCD();
-//		drive.tankDrive(foo.getValue(), foo.getValue());
 	}
 
 }
