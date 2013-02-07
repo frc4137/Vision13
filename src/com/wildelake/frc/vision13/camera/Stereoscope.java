@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
  *         }
  *     }
  */
-public abstract class Stereoscope {
+public abstract class Stereoscope extends RangeFinder {
 	public final Camera left, right;
 	private final double distance, tanHalfAOV;
 	private final CriteriaCollection cc;
@@ -53,17 +53,6 @@ public abstract class Stereoscope {
 		this.tanHalfAOV = Math.tan(Math.toRadians(47));
 		this.cc = cc;
 		refresh();
-	}
-	
-	public abstract BinaryImage threshold(ColorImage img) throws NIVisionException;
-	
-	private BinaryImage safeThreshold(ColorImage img) {
-		try {
-			return threshold(img);
-		}
-		catch (NIVisionException e) {
-			return null;
-		}
 	}
 	
 	/**
@@ -136,8 +125,8 @@ public abstract class Stereoscope {
 		archiveNextRefresh = true;
 	}
 	
-	/**
-	 * This returns the number of centimeters (parallel to the center of the field of view) to the target.
+	/* (non-Javadoc)
+	 * @see com.wildelake.frc.vision13.camera.RangeFinder#getDepth()
 	 */
 	public double getDepth() {
 		if (rightReports.length + leftReports.length <= 1)
@@ -159,15 +148,15 @@ public abstract class Stereoscope {
 		return (b[0] * b[1] * distance) / (b[0] + b[1]);
 	}
 	
-	/**
-	 * Unlike getDepth, this returns a double in the range [-1.0, 1.0]
+	/* (non-Javadoc)
+	 * @see com.wildelake.frc.vision13.camera.RangeFinder#getX()
 	 */
 	public double getX() {
 		return (rightReports[0].center_mass_x_normalized + leftReports[0].center_mass_x_normalized) / 2;
 	}
 	
-	/**
-	 * Unlike getDepth, this returns a double in the range [-1.0, 1.0]
+	/* (non-Javadoc)
+	 * @see com.wildelake.frc.vision13.camera.RangeFinder#getY()
 	 */
 	public double getY() {
 		// technically both the masses should be about the same, but this should help make it more accurate

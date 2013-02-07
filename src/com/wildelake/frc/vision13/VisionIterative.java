@@ -7,9 +7,9 @@
 
 package com.wildelake.frc.vision13;
 
+import com.wildelake.frc.vision13.Config;
 import com.wildelake.frc.vision13.Port;
-import com.wildelake.frc.vision13.camera.MyAxisCamera;
-import com.wildelake.frc.vision13.camera.Stereoscope;
+import com.wildelake.frc.vision13.camera.*;
 import com.wildelake.frc.vision13.components.*;
 import com.wildelake.frc.vision13.controls.MyJoystick;
 
@@ -18,13 +18,12 @@ import edu.wpi.first.wpilibj.Jaguar;
 //import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.camera.AxisCamera;
+import edu.wpi.first.wpilibj.camera.*;
 import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 
 import com.wildelake.frc.vision13.pilot.*;
-import com.wildelake.frc.vision13.pilot.Pilot;
 import com.wildelake.frc.vision13.utils.*;
 
 public class VisionIterative extends IterativeRobot {
@@ -53,19 +52,27 @@ public class VisionIterative extends IterativeRobot {
 		drive = new RobotDrive(driveMotors[0], driveMotors[1], driveMotors[2], driveMotors[3]);
 		fireMotor = new Jaguar(Port.FIRE_MOTOR);
 		
-		Camera left  = new MyAxisCamera(AxisCamera.getInstance("10.41.37.12"));
-		Camera right = new MyAxisCamera(AxisCamera.getInstance("10.41.37.11"));
+		Camera left  = new MyAxisCamera(AxisCamera.getInstance("10.41.37.11"));
+//		Camera right = new MyAxisCamera(NonSingletonAxisCamera.getInstance("10.41.37.12"));
 		
-		manual = new CameraTestPilot(,
+		manual = new CameraTestPilot(
 			new MyJoystick(Port.JOYSTICK1),
-			new Stereoscope(left, right) {
+//			new Stereoscope(left, right) {
+//				public BinaryImage threshold(ColorImage img) throws NIVisionException {
+//					if (img == null) {
+//						System.out.println("NULL");
+//						return null;
+//					}
+//					return img.thresholdHSL(88, 198, 33, 186, 167, 255); // ring lights
+//				}
+//			}
+			new Monoscope(left, 1, 1) {
 				public BinaryImage threshold(ColorImage img) throws NIVisionException {
 					if (img == null) {
 						System.out.println("NULL");
 						return null;
 					}
 					return img.thresholdHSL(88, 198, 33, 186, 167, 255); // ring lights
-//					return img.thresholdHSL(25, 255, 0, 45, 0, 47);      // plagiarized 
 				}
 			});
 	}
@@ -73,8 +80,4 @@ public class VisionIterative extends IterativeRobot {
 	public void teleopPeriodic() {
 		manual.tick();
 	}
-	
-	// FOR DEBUGGING W/O THE DRIVER STATION ONLY, USE WITH CAUTION
-//	public void disabledInit() { teleopInit(); }
-//	public void disabledPeriodic() { teleopPeriodic(); }
 }

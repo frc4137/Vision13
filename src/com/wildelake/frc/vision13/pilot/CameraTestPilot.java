@@ -1,5 +1,7 @@
 package com.wildelake.frc.vision13.pilot;
 
+import com.wildelake.frc.vision13.camera.Monoscope;
+import com.wildelake.frc.vision13.camera.RangeFinder;
 import com.wildelake.frc.vision13.camera.Stereoscope;
 import com.wildelake.frc.vision13.controls.BooleanInput;
 import com.wildelake.frc.vision13.controls.Controller;
@@ -15,17 +17,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * CameraTestPilot shows range from a SScope on the DSL
  */
 public class CameraTestPilot extends ControlSet implements Pilot {
-	private final Stereoscope sscope;
+	private final RangeFinder sscope;
 	private DriverStationLCD dsl;
-	private int time;
+//	private int time;
 	private BooleanControl archive;
 	private Controller joystick1;
 	
-	public CameraTestPilot(Controller joystick1, Stereoscope sscope) {
+	public CameraTestPilot(Controller joystick1, RangeFinder sscope) {
 		this.sscope = sscope;
 		this.joystick1 = joystick1;
 		dsl = DriverStationLCD.getInstance();
-		time = 0;
+//		time = 0;
 		Control.buildControlSet(this);
 	}
 	
@@ -39,20 +41,23 @@ public class CameraTestPilot extends ControlSet implements Pilot {
 	}
 	
 	public void update() {
-		if (time % 30 == 0) {
-			sscope.refresh();
-			SmartDashboard.putString("anaFeed", sscope.left.getImage().toString());
-		}
-		time++;
+//		if (time % 30 == 0) {
+//			sscope.refresh();
+//			SmartDashboard.putString("anaFeed", sscope.left.getImage().toString());
+//		}
+//		time++;
 		dsl.println(Line.kMain6, 1, "Don't Press SPACEBRO");
 		System.out.println(sscope.getDepth());
-		sscope.debugReports();
-		if (archive.getValue()) {
-			System.out.println("Pilot");
-			sscope.archivePhotos();
-		}
+//		sscope.debugReports();
+		if (archive.getValue())
+			try {
+				((Monoscope) sscope).getCamera().getImage().write("/tmp/original.png");
+			} catch (NIVisionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		dsl.println(Line.kUser2, 1, "Current Range: "+sscope.getDepth()+"                           ");
-		dsl.println(Line.kUser3, 1, String.valueOf(sscope.left == sscope.right));
+//		dsl.println(Line.kUser3, 1, String.valueOf(sscope.left == sscope.right));
 		dsl.updateLCD();
 	}
 
