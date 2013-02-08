@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 package edu.wpi.first.wpilibj.camera;
 
-import java.awt.Dimension;
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -24,11 +23,12 @@ import edu.wpi.first.wpilibj.parsing.ISensor;
 public class NonSingletonAxisCamera implements ISensor, Camera {
     
     private String IPAddress;
-    private Dimension res;
+    private int[] res;
     private int i;
     private int refreshRate;
+    private HSLImage image;
     
-    public static synchronized NonSingletonAxisCamera getInstance(String address, Dimension res) {
+    public static synchronized NonSingletonAxisCamera getInstance(String address, int[] res) {
         return new NonSingletonAxisCamera(address, 60, res);
     }
     
@@ -43,7 +43,7 @@ public class NonSingletonAxisCamera implements ISensor, Camera {
      * @return A reference to the AxisCamera.
      */
     public static synchronized NonSingletonAxisCamera getInstance(String address) {
-        return new NonSingletonAxisCamera(address, 60, new Dimension(640, 480));
+        return new NonSingletonAxisCamera(address, 30, new int[] {640, 480});
     }
 
     /**
@@ -54,19 +54,26 @@ public class NonSingletonAxisCamera implements ISensor, Camera {
      * @return A reference to the AxisCamera.
      */
     public static synchronized NonSingletonAxisCamera getInstance() {
-        return new NonSingletonAxisCamera("10.41.37.11", 60, new Dimension(640, 480));
+        return new NonSingletonAxisCamera("10.41.37.11", 30, new int[] {640, 480});
     }
 
     
     /**
-     * Axis camera constructor that calls the C++ library to actually create the instance.
+     * Axis camera constructor that initializes variables.
      * @param IPAddress 
+     * @param refreshRate number of ticks during which to skip updates
+     * @param res sets resolution of images
      */
-    NonSingletonAxisCamera(String IPAddress, int refreshRate, Dimension res) {
+    NonSingletonAxisCamera(String IPAddress, int refreshRate, int[] res) {
     	this.IPAddress = IPAddress;
     	i = 0;
-    	this.refreshRate = refreshRate;
+    	this.refreshRate = refreshRate + 1;
     	this.res = res;
+		try {
+			image = new HSLImage("/tmp/original.png");
+		} catch (NIVisionException e) {
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -74,20 +81,25 @@ public class NonSingletonAxisCamera implements ISensor, Camera {
      * @return A new image from the camera.
      */
     public ColorImage getImage() {
-    	HSLImage image = null;
-		try {
-			image = new HSLImage("/tmp/original.png");
-		} catch (NIVisionException e) {
-			e.printStackTrace();
-		}
-        byte[] imageb = getImage("http://"+IPAddress+"/axis-cgi/jpg/image.cgi?resolution=" + (int) res.getWidth() + "x" + (int) res.getHeight());
-		StringBuffer imageBuffer = new StringBuffer();
-		for (int i = 0; i < imageb.length; i++) imageBuffer.append((char) imageb[i]);
-		NIVision.readJpegString(image.image, Pointer.createStringBuffer(imageBuffer.toString()));
+    	if (freshImage()) {
+    		byte[] imageb = retrieve("http://"+IPAddress+"/axis-cgi/jpg/image.cgi?resolution=" + res[0] + "x" + res[1]);
+    		StringBuffer imageBuffer = new StringBuffer();
+    		for (int i = 0; i < imageb.length; i++) imageBuffer.append((char) imageb[i]);
+    		NIVision.readJpegString(image.image, Pointer.createStringBuffer(imageBuffer.toString()));
+    	}
         return image;
     }
     
-    private byte[] getImage(String s) {
+    public void reGetImage(ColorImage image) {
+    	if (freshImage()) {
+    		byte[] imageb = retrieve("http://"+IPAddress+"/axis-cgi/jpg/image.cgi?resolution=" + res[0] + "x" + res[1]);
+    		StringBuffer imageBuffer = new StringBuffer();
+    		for (int i = 0; i < imageb.length; i++) imageBuffer.append((char) imageb[i]);
+    		NIVision.readJpegString(image.image, Pointer.createStringBuffer(imageBuffer.toString()));
+    	}
+    }
+    
+    private byte[] retrieve(String s) {
     	HttpConnection  hpc = null;
     	DataInputStream dis = null;
     	byte[] data = null;

@@ -2,9 +2,11 @@ package com.wildelake.frc.vision13.camera;
 
 import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.ColorImage;
+import edu.wpi.first.wpilibj.image.Image;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 
 public abstract class RangeFinder {
+	private boolean archiveNextRefresh = false;
 
 	/**
 	 * This returns the number of centimeters (parallel to the center of the field of view) to the target.
@@ -33,6 +35,22 @@ public abstract class RangeFinder {
 			return null;
 		}
 	}
+	
+	public abstract void update();
 
-	public abstract void refresh();
+	public final void refresh() {
+		update();
+		archiveNextRefresh = false;
+	}
+	
+	public final void archivePhotos() {
+		archiveNextRefresh = true;
+	}
+	
+	public final void archive(Image photo, String name) {
+		try {
+			if (archiveNextRefresh) photo.write(name);
+		}
+		catch (NIVisionException e) { }
+	}
 }

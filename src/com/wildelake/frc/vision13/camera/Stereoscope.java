@@ -29,7 +29,6 @@ public abstract class Stereoscope extends RangeFinder {
 	private final double distance, tanHalfAOV;
 	private final CriteriaCollection cc;
 	private ParticleAnalysisReport[] leftReports, rightReports;
-	private boolean archiveNextRefresh = false;
 
 	public Stereoscope(Camera left, Camera right, double distance, double halfAOV, CriteriaCollection cc) {
 		this.left = left;
@@ -49,8 +48,8 @@ public abstract class Stereoscope extends RangeFinder {
 		cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
 		this.left = left;
 		this.right = right;
-		this.distance = 33+3/16;
-		this.tanHalfAOV = Math.tan(Math.toRadians(47/2));
+		this.distance = 33.0+3.0/16.0;
+		this.tanHalfAOV = Math.tan(Math.toRadians(47.0/2.0));
 		this.cc = cc;
 		refresh();
 	}
@@ -58,17 +57,15 @@ public abstract class Stereoscope extends RangeFinder {
 	/**
 	 * recalculate the leftReports and rightReports variables
 	 */
-	public void refresh() {
-		try { leftReports = refreshSide(left, archiveNextRefresh, "/tmp/left_"); }
+	public void update() {
+		try { leftReports = updateSide(left,"/tmp/left_"); }
 		catch (NIVisionException e) { e.printStackTrace(); }
 		
-		try { rightReports = refreshSide(right, archiveNextRefresh, "/tmp/right_"); }
+		try { rightReports = updateSide(right,"/tmp/right_"); }
 		catch (NIVisionException e) { e.printStackTrace(); }
-		
-		archiveNextRefresh = false;
 	}
 	
-	private ParticleAnalysisReport[] refreshSide(Camera cam, boolean shouldArchive, String prefix) throws NIVisionException {
+	private ParticleAnalysisReport[] updateSide(Camera cam, String prefix) throws NIVisionException {
 		ColorImage image = null;
 		BinaryImage thresholdImage = null, bigObjectsImage = null, convexHullImage = null, filteredImage = null;
 		boolean connectivity8 = true;
@@ -79,14 +76,11 @@ public abstract class Stereoscope extends RangeFinder {
 			bigObjectsImage = thresholdImage.removeSmallObjects(connectivity8, 2);
 			convexHullImage = bigObjectsImage.convexHull(connectivity8);
 			filteredImage = convexHullImage.particleFilter(cc);
-			if (shouldArchive) {
-				System.out.println(prefix);
-				image          .write(prefix + "original.png");
-				thresholdImage .write(prefix + "thresholded.png");
-				bigObjectsImage.write(prefix + "big_objects.png");
-				convexHullImage.write(prefix + "convex_hull.png");
-				filteredImage  .write(prefix + "filtered.png");
-			}
+			archive(image,           prefix + "original.png");
+			archive(thresholdImage,  prefix + "thresholded.png");
+			archive(bigObjectsImage, prefix + "big_objects.png");
+			archive(convexHullImage, prefix + "convex_hull.png");
+			archive(filteredImage,   prefix + "filtered.png");
 	
 			return filteredImage.getOrderedParticleAnalysisReports();
 		}
@@ -99,7 +93,7 @@ public abstract class Stereoscope extends RangeFinder {
 				if (convexHullImage != null) convexHullImage.free();
 				if (bigObjectsImage != null) bigObjectsImage.free();
 				if (thresholdImage != null) thresholdImage.free();
-				if (image != null) image.free();
+				// if (image != null) image.free(); DON'T DO THIS b/c NonSingletonAxisCamera optimizations
 			}
 			catch (Exception e) {
 				System.err.println("Something broke while freeing an image buffer. Looks like it's gonna be a rough night.");
@@ -120,10 +114,6 @@ public abstract class Stereoscope extends RangeFinder {
 		}
 	}
 	
-	public void archivePhotos() {
-		archiveNextRefresh = true;
-	}
-	
 	/* (non-Javadoc)
 	 * @see com.wildelake.frc.vision13.camera.RangeFinder#getDepth()
 	 */
@@ -135,15 +125,18 @@ public abstract class Stereoscope extends RangeFinder {
 		double[] a = {
 			// TODO this currently just picks the first object detect by each camera, which is inherently wrong, 
 			// and should only be used for testing with a single goal.
-			MoreMath.atan(((rightReports[0].center_mass_x - pixelWidth)
-					/ pixelWidth) * tanHalfAOV),
-			MoreMath.atan(((leftReports[0].center_mass_x  - pixelWidth)
-					/ pixelWidth) * tanHalfAOV)
+			MoreMath.atan(((pixelWidth - (double) leftReports[0].center_mass_x)
+				/ pixelWidth) * tanHalfAOV),
+			MoreMath.atan((((double) rightReports[0].center_mass_x - pixelWidth)
+				/ pixelWidth) * tanHalfAOV)
 		};
 		double[] b = {
 				Math.tan(Math.PI/2 - a[0]),
 				Math.tan(Math.PI/2 - a[1])
 		};
+		System.out.println(a[0]+" "+a[1]);
+		System.out.println(b[0]+" "+b[1]);
+		System.out.println((b[0] * b[1] * distance) / (b[0] + b[1]));
 		return (b[0] * b[1] * distance) / (b[0] + b[1]);
 	}
 	
