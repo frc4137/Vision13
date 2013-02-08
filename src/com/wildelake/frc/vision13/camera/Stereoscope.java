@@ -50,7 +50,7 @@ public abstract class Stereoscope extends RangeFinder {
 		this.left = left;
 		this.right = right;
 		this.distance = 33+3/16;
-		this.tanHalfAOV = Math.tan(Math.toRadians(47));
+		this.tanHalfAOV = Math.tan(Math.toRadians(47/2));
 		this.cc = cc;
 		refresh();
 	}
@@ -79,7 +79,6 @@ public abstract class Stereoscope extends RangeFinder {
 			bigObjectsImage = thresholdImage.removeSmallObjects(connectivity8, 2);
 			convexHullImage = bigObjectsImage.convexHull(connectivity8);
 			filteredImage = convexHullImage.particleFilter(cc);
-			
 			if (shouldArchive) {
 				System.out.println(prefix);
 				image          .write(prefix + "original.png");
@@ -129,7 +128,7 @@ public abstract class Stereoscope extends RangeFinder {
 	 * @see com.wildelake.frc.vision13.camera.RangeFinder#getDepth()
 	 */
 	public double getDepth() {
-		if (rightReports.length + leftReports.length <= 1)
+		if (rightReports.length == 0 || leftReports.length == 0)
 			return -1.0;
 		// Thanks to Edwin Tjandranegara (Purdue University) for "Distance Estimation Algorithm for Stereo Pair Images" (2005).
 		double pixelWidth = 640/2; // TODO generalize this, currently it only works for images which are 640 pixels wide

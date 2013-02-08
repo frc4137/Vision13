@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class CameraTestPilot extends ControlSet implements Pilot {
 	private final RangeFinder sscope;
 	private DriverStationLCD dsl;
-//	private int time;
+	private int time;
 	private BooleanControl archive;
 	private Controller joystick1;
 	
@@ -41,21 +41,15 @@ public class CameraTestPilot extends ControlSet implements Pilot {
 	}
 	
 	public void update() {
-//		if (time % 30 == 0) {
-//			sscope.refresh();
+		if (time % 30 == 0) {
+			sscope.refresh();
 //			SmartDashboard.putString("anaFeed", sscope.left.getImage().toString());
-//		}
-//		time++;
+		}
+		time++;
 		dsl.println(Line.kMain6, 1, "Don't Press SPACEBRO");
-		System.out.println(sscope.getDepth());
-//		sscope.debugReports();
-		if (archive.getValue())
-			try {
-				((Monoscope) sscope).getCamera().getImage().write("/tmp/original.png");
-			} catch (NIVisionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (archive.getValue()) ((Stereoscope) sscope).archivePhotos();
+//		System.out.println(sscope.getDepth());
+		((Stereoscope) sscope).debugReports();
 		dsl.println(Line.kUser2, 1, "Current Range: "+sscope.getDepth()+"                           ");
 //		dsl.println(Line.kUser3, 1, String.valueOf(sscope.left == sscope.right));
 		dsl.updateLCD();

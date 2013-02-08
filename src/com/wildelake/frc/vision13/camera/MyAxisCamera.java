@@ -1,6 +1,5 @@
 package com.wildelake.frc.vision13.camera;
 
-import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.NonSingletonAxisCamera;
 import edu.wpi.first.wpilibj.image.ColorImage;
 
@@ -8,11 +7,11 @@ import edu.wpi.first.wpilibj.image.ColorImage;
  * This wraps an AxisCamera so that it adheres to the Camera interface.
  */
 public class MyAxisCamera implements Camera {
-	private final AxisCamera cam;
+	private final NonSingletonAxisCamera cam;
 	private ColorImage image;
 	
-	public MyAxisCamera(AxisCamera axisCamera) {
-		this.cam = axisCamera;
+	public MyAxisCamera(NonSingletonAxisCamera nonSingletonAxisCamera) {
+		this.cam = nonSingletonAxisCamera;
 		do {
 			try {
 				Thread.sleep(1);
@@ -20,9 +19,9 @@ public class MyAxisCamera implements Camera {
 			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		} while (!axisCamera.freshImage());
+		} while (!nonSingletonAxisCamera.freshImage());
 		try {
-			image = axisCamera.getImage();
+			image = nonSingletonAxisCamera.getImage();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

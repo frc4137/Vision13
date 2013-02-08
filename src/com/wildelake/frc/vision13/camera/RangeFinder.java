@@ -33,4 +33,6 @@ public abstract class RangeFinder {
 			return null;
 		}
 	}
+
+	public abstract void refresh();
 }
