@@ -8,53 +8,43 @@ package edu.wpi.first.wpilibj.camera;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Stack;
+import java.util.Vector;
 
 import javax.microedition.io.*;
 
 import com.sun.cldc.jna.Pointer;
 import com.wildelake.frc.vision13.camera.Camera;
 
+import edu.wpi.first.wpilibj.image.CameraImage;
+import edu.wpi.first.wpilibj.image.CameraImageManager;
 import edu.wpi.first.wpilibj.image.ColorImage;
-import edu.wpi.first.wpilibj.image.HSLImage;
 import edu.wpi.first.wpilibj.image.NIVision;
 import edu.wpi.first.wpilibj.image.NIVisionException;
 import edu.wpi.first.wpilibj.parsing.ISensor;
 
-public class NonSingletonAxisCamera implements ISensor, Camera {
+public class NonSingletonAxisCamera implements ISensor, Camera, CameraImageManager {
     
     private String IPAddress;
-    private int[] res;
+    private int width, height;
     private int i;
     private int refreshRate;
-    private HSLImage image;
+    private Vector usedImages;
+    private Stack unusedImages;
+    private ColorImage cache;
     
-    public static synchronized NonSingletonAxisCamera getInstance(String address, int[] res) {
-        return new NonSingletonAxisCamera(address, 60, res);
-    }
+    private static final int DEFAULT_WIDTH = 640;
+    private static final int DEFAULT_HEIGHT = 480;
+    private static final int DEFAULT_REFRESH = 30;
     
-    /**
-     * Get a reference to the AxisCamera. If the camera is connected to the
-     * Ethernet switch on the robot, then this address should be 10.x.y.11
-     * where x.y are your team number subnet address (same as the other IP
-     * addresses on the robot network).
-     * @param address A string containing the IP address for the camera in the
-     * form "10.x.y.2" for cameras on the Ethernet switch or "192.168.0.90"
-     * for cameras connected to the 2nd Ethernet port on an 8-slot cRIO.
-     * @return A reference to the AxisCamera.
-     */
-    public static synchronized NonSingletonAxisCamera getInstance(String address) {
-        return new NonSingletonAxisCamera(address, 30, new int[] {640, 480});
+    public NonSingletonAxisCamera(String address, int width, int height) {
+        this(address, DEFAULT_REFRESH, width, height);
     }
-
-    /**
-     * Get a reference to the AxisCamera. By default this will connect to a camera
-     * with an IP address of 10.x.y.11 with the preference that the camera be
-     * connected to the Ethernet switch on the robot rather than port 2 of the
-     * 8-slot cRIO.
-     * @return A reference to the AxisCamera.
-     */
-    public static synchronized NonSingletonAxisCamera getInstance() {
-        return new NonSingletonAxisCamera("10.41.37.11", 30, new int[] {640, 480});
+    public NonSingletonAxisCamera(String address) {
+        this(address, DEFAULT_REFRESH, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+    public NonSingletonAxisCamera() {
+        this("10.41.37.11", DEFAULT_REFRESH, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
     
@@ -64,16 +54,15 @@ public class NonSingletonAxisCamera implements ISensor, Camera {
      * @param refreshRate number of ticks during which to skip updates
      * @param res sets resolution of images
      */
-    NonSingletonAxisCamera(String IPAddress, int refreshRate, int[] res) {
+    NonSingletonAxisCamera(String IPAddress, int refreshRate, int width, int height) {
     	this.IPAddress = IPAddress;
     	i = 0;
     	this.refreshRate = refreshRate + 1;
-    	this.res = res;
-		try {
-			image = new HSLImage("/tmp/original.png");
-		} catch (NIVisionException e) {
-			e.printStackTrace();
-		}
+    	this.width = width;
+    	this.height = height;
+    	this.usedImages = new Vector();
+    	this.unusedImages = new Stack();
+		getImage();
     }
 
     /**
@@ -82,21 +71,15 @@ public class NonSingletonAxisCamera implements ISensor, Camera {
      */
     public ColorImage getImage() {
     	if (freshImage()) {
-    		byte[] imageb = retrieve("http://"+IPAddress+"/axis-cgi/jpg/image.cgi?resolution=" + res[0] + "x" + res[1]);
+    		ColorImage image = getAndUseImage();
+    		byte[] imageb = retrieve("http://"+IPAddress+"/axis-cgi/jpg/image.cgi?resolution=" + width + "x" + height);
     		StringBuffer imageBuffer = new StringBuffer();
     		for (int i = 0; i < imageb.length; i++) imageBuffer.append((char) imageb[i]);
     		NIVision.readJpegString(image.image, Pointer.createStringBuffer(imageBuffer.toString()));
+    		cache = image;
+    		return image;
     	}
-        return image;
-    }
-    
-    public void reGetImage(ColorImage image) {
-    	if (freshImage()) {
-    		byte[] imageb = retrieve("http://"+IPAddress+"/axis-cgi/jpg/image.cgi?resolution=" + res[0] + "x" + res[1]);
-    		StringBuffer imageBuffer = new StringBuffer();
-    		for (int i = 0; i < imageb.length; i++) imageBuffer.append((char) imageb[i]);
-    		NIVision.readJpegString(image.image, Pointer.createStringBuffer(imageBuffer.toString()));
-    	}
+    	return cache;
     }
     
     private byte[] retrieve(String s) {
@@ -104,23 +87,57 @@ public class NonSingletonAxisCamera implements ISensor, Camera {
     	DataInputStream dis = null;
     	byte[] data = null;
 		try {
-    	hpc = (HttpConnection) Connector.open(s);
-		int length = (int) hpc.getLength();
-		data = new byte[length];
-		dis = new DataInputStream(hpc.openInputStream());
+	    	hpc = (HttpConnection) Connector.open(s);
+			int length = (int) hpc.getLength();
+			data = new byte[length];
+			dis = new DataInputStream(hpc.openInputStream());
 			dis.readFully(data);
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 		return data;
     }
     
     /**
-     * Has the current image from the camera been retrieved yet.
+     * Tells whether the current image from the camera been retrieved yet.
      * @return true if the latest image from the camera has not been retrieved yet.
      */
     public boolean freshImage() {
+    	// TODO actually do this right
     	i++;
         return i % refreshRate !=0;
+    }
+    
+    public void imageFreed(CameraImage image) {
+    	usedImages.removeElement(image);
+    	if (unusedImages.size() < 5) {
+    		unusedImages.push(image);
+    	}
+    	else {
+    		try {
+				image.dealloc();
+			} catch (NIVisionException e) {
+				e.printStackTrace();
+			}
+    	}
+    }
+    
+    private CameraImage getAndUseImage() {
+    	if (unusedImages.size() > 0) {
+    		CameraImage image = (CameraImage) unusedImages.pop();
+    		usedImages.addElement(image);
+    		return image;
+    	}
+    	CameraImage image = null;
+		try {
+			image = new CameraImage("/tmp/original.png", this);
+		}
+		catch (NIVisionException e) {
+			System.err.println("Could not create new image.");
+			e.printStackTrace();
+		}
+    	usedImages.addElement(image);
+    	return image;
     }
 }

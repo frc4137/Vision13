@@ -1,7 +1,5 @@
 package com.wildelake.frc.vision13.camera;
 
-import java.util.Vector;
-
 import com.wildelake.frc.vision13.Config;
 import com.wildelake.frc.vision13.utils.MoreMath;
 
@@ -18,7 +16,8 @@ import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
  * Manages two Cameras to allow for calculating the 3d position of targets.
  * 
  * Must be initialized by providing a custom threshold method like so:
- *     new Stereoscope(leftCamera, rightCamera, distance, halfAOV, cc) {
+ * 
+ *     new Stereoscope(leftCamera, rightCamera) {
  *         public BinaryImage threshold(ColorImage img) {
  *             return img.thresholdRGB(25, 255, 0, 45, 0, 47);
  *         }
@@ -58,10 +57,29 @@ public abstract class Stereoscope extends RangeFinder {
 	 * recalculate the leftReports and rightReports variables
 	 */
 	public void update() {
-		try { leftReports = updateSide(left,"/tmp/left_"); }
+//		final ParticleAnalysisReport[][] reports = new ParticleAnalysisReport[][] { null, null };
+//		
+//		new Thread(new Runnable() {
+//			public void run() {
+//				try { reports[0] = updateSide(left, "/tmp/left_"); }
+//				catch (NIVisionException e) { e.printStackTrace(); }
+//			}
+//		});
+//
+//		new Thread(new Runnable() {
+//			public void run() {
+//				try { reports[1] = updateSide(right,"/tmp/right_"); }
+//				catch (NIVisionException e) { e.printStackTrace(); }
+//			}
+//		});
+//
+//		// TODO make sure that updateSide NEVER returns null or else this loop will run forever
+//		while (reports[0] == null || reports[1] == null);
+//		leftReports = reports[0];
+//		rightReports = reports[1];
+		try { leftReports = updateSide(left, "/tmp/left_"); }
 		catch (NIVisionException e) { e.printStackTrace(); }
-		
-		try { rightReports = updateSide(right,"/tmp/right_"); }
+		try { rightReports = updateSide(right, "/tmp/right_"); }
 		catch (NIVisionException e) { e.printStackTrace(); }
 	}
 	
@@ -70,7 +88,6 @@ public abstract class Stereoscope extends RangeFinder {
 		BinaryImage thresholdImage = null, bigObjectsImage = null, convexHullImage = null, filteredImage = null;
 		boolean connectivity8 = true;
 		try {
-			// Thanks to WPILIBJ authors. Much of this is copied from sample code.
 			image = cam.getImage();
 			thresholdImage = safeThreshold(image);
 			bigObjectsImage = thresholdImage.removeSmallObjects(connectivity8, 2);
@@ -93,7 +110,7 @@ public abstract class Stereoscope extends RangeFinder {
 				if (convexHullImage != null) convexHullImage.free();
 				if (bigObjectsImage != null) bigObjectsImage.free();
 				if (thresholdImage != null) thresholdImage.free();
-				// if (image != null) image.free(); DON'T DO THIS b/c NonSingletonAxisCamera optimizations
+				if (image != null) image.free();
 			}
 			catch (Exception e) {
 				System.err.println("Something broke while freeing an image buffer. Looks like it's gonna be a rough night.");
@@ -134,9 +151,6 @@ public abstract class Stereoscope extends RangeFinder {
 				Math.tan(Math.PI/2 - a[0]),
 				Math.tan(Math.PI/2 - a[1])
 		};
-		System.out.println(a[0]+" "+a[1]);
-		System.out.println(b[0]+" "+b[1]);
-		System.out.println((b[0] * b[1] * distance) / (b[0] + b[1]));
 		return (b[0] * b[1] * distance) / (b[0] + b[1]);
 	}
 	

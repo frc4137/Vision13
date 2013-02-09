@@ -52,8 +52,8 @@ public class VisionIterative extends IterativeRobot {
 		drive = new RobotDrive(driveMotors[0], driveMotors[1], driveMotors[2], driveMotors[3]);
 		fireMotor = new Jaguar(Port.FIRE_MOTOR);
 		
-		Camera left  = NonSingletonAxisCamera.getInstance("10.41.37.11");
-		Camera right = NonSingletonAxisCamera.getInstance("10.41.37.12");
+		Camera left  = new NonSingletonAxisCamera("10.41.37.11");
+		Camera right = new NonSingletonAxisCamera("10.41.37.12");
 		
 		manual = new CameraTestPilot(
 			new MyJoystick(Port.JOYSTICK1),
@@ -63,18 +63,9 @@ public class VisionIterative extends IterativeRobot {
 						System.out.println("NULL");
 						return null;
 					}
-					return img.thresholdHSL(88, 198, 33, 186, 167, 255); // ring lights
+					return img.thresholdHSL(88, 198, 33, 186, 167, 255);
 				}
 			});
-//			new Monoscope(left, 1, 1) {
-//				public BinaryImage threshold(ColorImage img) throws NIVisionException {
-//					if (img == null) {
-//						System.out.println("NULL");
-//						return null;
-//					}
-//					return img.thresholdHSL(88, 198, 33, 186, 167, 255); // ring lights
-//				}
-//			});
 	}
 
 	public void teleopPeriodic() {

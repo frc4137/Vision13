@@ -1,6 +1,5 @@
 package com.wildelake.frc.vision13.pilot;
 
-import com.wildelake.frc.vision13.camera.Monoscope;
 import com.wildelake.frc.vision13.camera.RangeFinder;
 import com.wildelake.frc.vision13.camera.Stereoscope;
 import com.wildelake.frc.vision13.controls.BooleanInput;
@@ -9,9 +8,6 @@ import com.wildelake.frc.vision13.controls.compositions.*;
 
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.image.NIVisionException;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * CameraTestPilot shows range from a SScope on the DSL

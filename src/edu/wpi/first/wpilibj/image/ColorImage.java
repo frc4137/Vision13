@@ -19,7 +19,7 @@ public abstract class ColorImage extends Image {
     ColorImage(ColorImage sourceImage) {
         super(sourceImage);
     }
-
+    
     private BinaryImage threshold(NIVision.ColorMode colorMode,
             int low1, int high1,
             int low2, int high2,

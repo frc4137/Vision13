@@ -3,13 +3,11 @@ package com.wildelake.frc.vision13.pilot;
 import com.wildelake.frc.vision13.Port;
 import com.wildelake.frc.vision13.controls.BooleanInput;
 import com.wildelake.frc.vision13.controls.Controller;
-import com.wildelake.frc.vision13.controls.VariadicInput;
 import com.wildelake.frc.vision13.controls.compositions.*;
 
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.SpeedController;
 
 /**
  * MechanicalPilot is the primary set of controls for Mechanical on 01-26-12
