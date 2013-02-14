@@ -28,8 +28,31 @@ public abstract class Stereoscope extends RangeFinder {
 	private final double distance, tanHalfAOV;
 	private final CriteriaCollection cc;
 	private ParticleAnalysisReport[] leftReports, rightReports;
+	private boolean depthCalced = false, xCalced = false, yCalced = false, refreshing = false;
+	private double x, y, depth;
+
+	private void setLeftReports(ParticleAnalysisReport[] leftReports) {
+		this.leftReports = leftReports;
+	}
+	
+	private void setRightReports(ParticleAnalysisReport[] rightReports) {
+		this.rightReports = rightReports;
+	}
+	
+	private void setRefreshing(boolean refreshing) {
+		this.refreshing = refreshing;
+	}
+	
+	private void refreshed() {
+		 depthCalced = xCalced = yCalced = false;
+	}
 
 	public Stereoscope(Camera left, Camera right, double distance, double halfAOV, CriteriaCollection cc) {
+		if (cc == null) {
+			cc = new CriteriaCollection();
+			cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
+			cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
+		}
 		this.left = left;
 		this.right = right;
 		this.distance = distance;
@@ -42,45 +65,45 @@ public abstract class Stereoscope extends RangeFinder {
 	 * This constructor is specialized for the 2013 robot's configuration using axis cameras
 	 */
 	public Stereoscope(Camera left, Camera right) {
-		CriteriaCollection cc = new CriteriaCollection();
-		cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
-		cc.addCriteria(MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
-		this.left = left;
-		this.right = right;
-		this.distance = 33.0+3.0/16.0;
-		this.tanHalfAOV = Math.tan(Math.toRadians(47.0/2.0));
-		this.cc = cc;
-		refresh();
+		this(left, right, 33.0+3.0/16.0, Math.toRadians(47.0/2.0), null);
+	}
+	
+	private class Refresher implements Runnable {
+		// Should probably consider using more general synchronization techniques...
+		private Stereoscope sscope;
+		private ParticleAnalysisReport[][] reports;
+		private int index, unindex;
+		private String name;
+		
+		public Refresher(Stereoscope sscope, ParticleAnalysisReport[][] reports, int index, String name) {
+			this.sscope = sscope;
+			this.reports = reports;
+			this.index = index;
+			unindex = (index == 0) ? 1 : 0;
+			this.name = name;
+		}
+		
+		public void run() {
+			try { reports[index] = sscope.updateSide(left, "/tmp/" + name + "_"); }
+			catch (NIVisionException e) { e.printStackTrace(); }
+			if (reports[unindex] == null) return;
+			sscope.setLeftReports (reports[index]);
+			sscope.setRightReports(reports[unindex]);
+			sscope.setRefreshing(false);
+			sscope.refreshed();
+		}
 	}
 	
 	/**
 	 * recalculate the leftReports and rightReports variables
 	 */
 	public void update() {
-//		final ParticleAnalysisReport[][] reports = new ParticleAnalysisReport[][] { null, null };
-//		
-//		new Thread(new Runnable() {
-//			public void run() {
-//				try { reports[0] = updateSide(left, "/tmp/left_"); }
-//				catch (NIVisionException e) { e.printStackTrace(); }
-//			}
-//		});
-//
-//		new Thread(new Runnable() {
-//			public void run() {
-//				try { reports[1] = updateSide(right,"/tmp/right_"); }
-//				catch (NIVisionException e) { e.printStackTrace(); }
-//			}
-//		});
-//
-//		// TODO make sure that updateSide NEVER returns null or else this loop will run forever
-//		while (reports[0] == null || reports[1] == null);
-//		leftReports = reports[0];
-//		rightReports = reports[1];
-		try { leftReports = updateSide(left, "/tmp/left_"); }
-		catch (NIVisionException e) { e.printStackTrace(); }
-		try { rightReports = updateSide(right, "/tmp/right_"); }
-		catch (NIVisionException e) { e.printStackTrace(); }
+		if (refreshing) return;
+		refreshing = true;
+		final ParticleAnalysisReport[][] reports = new ParticleAnalysisReport[][] { null, null };
+		
+		new Thread(new Refresher(this, reports, 0, "left")).run();
+		new Thread(new Refresher(this, reports, 1, "right")).run();
 	}
 	
 	private ParticleAnalysisReport[] updateSide(Camera cam, String prefix) throws NIVisionException {
@@ -131,10 +154,8 @@ public abstract class Stereoscope extends RangeFinder {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.wildelake.frc.vision13.camera.RangeFinder#getDepth()
-	 */
 	public double getDepth() {
+		if (depthCalced) return depth;
 		if (rightReports.length == 0 || leftReports.length == 0)
 			return -1.0;
 		// Thanks to Edwin Tjandranegara (Purdue University) for "Distance Estimation Algorithm for Stereo Pair Images" (2005).
@@ -151,22 +172,23 @@ public abstract class Stereoscope extends RangeFinder {
 				Math.tan(Math.PI/2 - a[0]),
 				Math.tan(Math.PI/2 - a[1])
 		};
-		return (b[0] * b[1] * distance) / (b[0] + b[1]);
+		depth = (b[0] * b[1] * distance) / (b[0] + b[1]);
+		depthCalced = true;
+		return depth;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.wildelake.frc.vision13.camera.RangeFinder#getX()
-	 */
 	public double getX() {
-		return (rightReports[0].center_mass_x_normalized + leftReports[0].center_mass_x_normalized) / 2;
+		if (xCalced) return x;
+		x = (rightReports[0].center_mass_x_normalized + leftReports[0].center_mass_x_normalized) / 2;
+		xCalced = true;
+		return x;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.wildelake.frc.vision13.camera.RangeFinder#getY()
-	 */
 	public double getY() {
-		// technically both the masses should be about the same, but this should help make it more accurate
-		return (rightReports[0].center_mass_y_normalized + leftReports[0].center_mass_y_normalized) / 2;
+		if (yCalced) return y;
+		y = (rightReports[0].center_mass_y_normalized + leftReports[0].center_mass_y_normalized) / 2;
+		yCalced = true;
+		return y;
 	}
 	
 	public ColorImage getAnaglyph() throws NIVisionException {

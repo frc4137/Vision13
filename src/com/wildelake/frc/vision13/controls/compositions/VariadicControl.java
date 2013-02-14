@@ -27,18 +27,15 @@ public abstract class VariadicControl extends Control {
 	
 	public void update() {}
 	
+	
 	public double getValue() {
 		return value;
 	}
-	/**
-	 * please don't call setValue from another control
-	 * TODO make the compiler enforce this if possible
-	 */
-	protected void setValue(double value) {
-		value = Math.min(value, 1);
-		value = Math.max(value, -1);
+	
+	public void setValue(double value) {
 		this.value = value;
 	}
+	
 	
 	// Sorry, java ME doesn't support enums
 	protected final int WHILE_POSITIVE_EVENT = 0;

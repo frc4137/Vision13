@@ -8,6 +8,7 @@ import com.wildelake.frc.vision13.controls.compositions.*;
 
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * CameraTestPilot shows range from a SScope on the DSL
@@ -23,7 +24,7 @@ public class CameraTestPilot extends ControlSet implements Pilot {
 		this.sscope = sscope;
 		this.joystick1 = joystick1;
 		dsl = DriverStationLCD.getInstance();
-//		time = 0;
+		time = 0;
 		Control.buildControlSet(this);
 	}
 	
@@ -37,17 +38,16 @@ public class CameraTestPilot extends ControlSet implements Pilot {
 	}
 	
 	public void update() {
-		if (time % 30 == 0) {
+		if (time % 180 == 0) {
 			sscope.refresh();
-//			SmartDashboard.putString("anaFeed", sscope.left.getImage().toString());
+			SmartDashboard.putString("anaFeed", "U LOST?");
 		}
 		time++;
 		dsl.println(Line.kMain6, 1, "Don't Press SPACEBRO");
 		if (archive.getValue()) ((Stereoscope) sscope).archivePhotos();
-//		System.out.println(sscope.getDepth());
+		System.out.println(sscope.getDepth());
 		((Stereoscope) sscope).debugReports();
 		dsl.println(Line.kUser2, 1, "Current Range: "+sscope.getDepth()+"                           ");
-//		dsl.println(Line.kUser3, 1, String.valueOf(sscope.left == sscope.right));
 		dsl.updateLCD();
 	}
 

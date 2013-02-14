@@ -36,7 +36,16 @@ public class ManualPilot extends ControlSet implements Pilot {
 		VariadicControl
 			joy1xRaw = new VariadicInput(joystick1, Port.JOY1X),
 			joy1yRaw = new VariadicInput(joystick1, Port.JOY1Y);
-		joy1rot = new VariadicInput(joystick1, Port.JOY1ROT);
+		joy1rot = new MultiplyVariadicControl(
+			new VariadicInput(joystick1, Port.JOY1ROT),
+			new ReboundedVariadicControl(
+				new BoundedVariadicControl(
+					new CounterVariadicControl(
+						new BooleanInput(joystick1, Port.INC_SPEED_BTN),
+						new BooleanInput(joystick1, Port.RST_SPEED_BTN),
+						new BooleanInput(joystick1, Port.DEC_SPEED_BTN),
+						.1)),
+					0, 2));
 		
 		BooleanControl
 			fullSpeed   = new BooleanInput(joystick1, Port.FULL_SPEED_BTN),

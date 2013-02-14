@@ -29,6 +29,8 @@ public class Port {
 		DEC_SPEED_BTN = 11,
 		SCALE_BTN = 10,
 		
-		FIRE_BTN = 7,
-		FIRE_MOTOR = 5;
+		FIRE_BTN = 12,
+		FIRE_MOTOR = 5,
+		
+		STEREOSCOPE_BTN = 10;
 }

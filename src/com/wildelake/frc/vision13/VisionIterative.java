@@ -45,6 +45,12 @@ public class VisionIterative extends IterativeRobot {
 			Function.calibrator( 0.006, -1.062,  0.120,  0.004, -1.028,  0.079), // Front Left
 			Function.calibrator(-0.004,  1.031, -0.089, -0.005,  1.046, -0.082)  // Front Right
 		};
+//		Function[] calibrators = new Function[] {
+//			Function.calibrator(0, -1, 0, 0, -1, 0), // Back Left
+//			Function.calibrator(0,  1, 0, 0,  1, 0), // Back Right
+//			Function.calibrator(0, -1, 0, 0, -1, 0), // Front Left
+//			Function.calibrator(0,  1, 0, 0,  1, 0)  // Front Right
+//		};
 		for (int i = 0; i < driveMotors.length; i++) {
 			driveMotors[i] = new RampedSpeedController(driveMotors[i], Config.getRamp());
 			driveMotors[i] = new CalibratedSpeedController(driveMotors[i], calibrators[i]);
@@ -52,23 +58,55 @@ public class VisionIterative extends IterativeRobot {
 		drive = new RobotDrive(driveMotors[0], driveMotors[1], driveMotors[2], driveMotors[3]);
 		fireMotor = new Jaguar(Port.FIRE_MOTOR);
 		
-		Camera left  = new NonSingletonAxisCamera("10.41.37.11");
-		Camera right = new NonSingletonAxisCamera("10.41.37.12");
+//		Camera left  = new NonSingletonAxisCamera("10.41.37.11");
+//		Camera right = new NonSingletonAxisCamera("10.41.37.12");
 		
-		manual = new CameraTestPilot(
-			new MyJoystick(Port.JOYSTICK1),
-			new Stereoscope(left, right) {
-				public BinaryImage threshold(ColorImage img) throws NIVisionException {
-					if (img == null) {
-						System.out.println("NULL");
-						return null;
-					}
-					return img.thresholdHSL(88, 198, 33, 186, 167, 255);
-				}
-			});
+//		manual = new CameraTestPilot(
+//			new MyJoystick(Port.JOYSTICK1),
+//			new Stereoscope(left, right) {
+//				public BinaryImage threshold(ColorImage img) throws NIVisionException {
+//					if (img == null) {
+//						System.out.println("NULL");
+//						return null;
+//					}
+//					return img.thresholdHSL(88, 198, 33, 186, 167, 255);
+//				}
+//			});
+//		manual = new AutoPilot(
+//			new MyJoystick(Port.JOYSTICK1),
+//			drive,
+//			fireMotor,
+//			new Stereoscope(left, right) {
+//				public BinaryImage threshold(ColorImage img) throws NIVisionException {
+//					if (img == null) {
+//						System.out.println("NULL");
+//						return null;
+//					}
+//					// Numbers below are values that the target should be due to lighting and
+//					// electrical tape, derived using histograms from actual images in NI Vision Assistant
+//					return img.thresholdHSL(88, 198, 33, 186, 167, 255);
+//				}
+//			});
+		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
+//		manual = new CalibrationPilot(new MyJoystick(Port.JOYSTICK1), driveMotors);
 	}
 
 	public void teleopPeriodic() {
 		manual.tick();
 	}
+	public void disabledPeriodic() {
+		System.out.println("You require more Vespene Gas!");
+	}
+	public void disabledInit() {
+		System.out.println("You must construct additional pylons!");
+	}
+	public void teleopInit() {
+		System.out.println("My life for Aiur!");
+	}
+	public void autonomousInit() {
+		System.out.println("I'm sorry Dave, I'm afraid I can't do that.");
+	}
+	//	public void disabledPeriodic() {
+//		manual.tick();
+//	}
 }
