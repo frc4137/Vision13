@@ -91,11 +91,11 @@ public class AutoPilot extends ControlSet implements Pilot {
 	
 	
 	public void update() {
-//		if (time % 30 == 0) {
-//			sscope.refresh();
-//			((Stereoscope) sscope).debugReports();
-//			SmartDashboard.putString("anaFeed", "U LOST?");
-//		}
+		if (time % 180 == 0) {
+			sscope.refresh();
+			((Stereoscope) sscope).debugReports();
+			SmartDashboard.putString("anaFeed", "U LOST?");
+		}
 		time++;
 		dsl.println(Line.kMain6, 1, "OK");
 		dsl.println(Line.kUser2, 1, "JoyStick 1 X: "+joy1x.getValue());
@@ -103,7 +103,7 @@ public class AutoPilot extends ControlSet implements Pilot {
 		dsl.println(Line.kUser4, 1, "JoyStick 1 r: " + joy1rot.getValue());
 		dsl.println(Line.kUser5, 1, String.valueOf(fire.getValue()));
 		dsl.println(Line.kUser6, 1, "Current Range: "+sscope.getDepth()+"                           ");
-		drive.mecanumDrive_Cartesian(joy1x.getValue(), joy1y.getValue(), joy1rot.getValue(), 0);
+		drive.mecanumDrive_Cartesian(-joy1x.getValue(), joy1y.getValue(), -joy1rot.getValue(), 0);
 		fireMotor.set(fire.getValue());
 		if (refresh.getValue()) sscope.refresh();
 		if (archive.getValue()) ((Stereoscope) sscope).archivePhotos();

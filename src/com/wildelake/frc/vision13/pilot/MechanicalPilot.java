@@ -1,51 +1,25 @@
 package com.wildelake.frc.vision13.pilot;
 
-import com.wildelake.frc.vision13.Port;
-import com.wildelake.frc.vision13.controls.BooleanInput;
-import com.wildelake.frc.vision13.controls.Controller;
-import com.wildelake.frc.vision13.controls.compositions.*;
-
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
-import edu.wpi.first.wpilibj.RobotDrive;
 
 /**
- * MechanicalPilot is the primary set of controls for Mechanical on 01-26-12
+ * MechanicalPilot is the primary set of controls for Mechanical on 03-28-12
  */
-public class MechanicalPilot extends ControlSet implements Pilot {
-	private final Controller joystick1;
-	private final RobotDrive drive;
-	private VariadicControl direction;
+public class MechanicalPilot implements Pilot {
 	private DriverStationLCD dsl;
-	
-	public MechanicalPilot(Controller joystick1, RobotDrive drive) {
-		this.joystick1 = joystick1;
-		this.drive = drive;
-		Control.buildControlSet(this);
+	private Compressor c;
+	public MechanicalPilot() {
+		c = new Compressor(6, 6);
+		c.start();
 		dsl = DriverStationLCD.getInstance();
 	}
 	
-	
-	public void buildControlSet() {
-		direction = new ToggleMultiplyVariadicControl(
-				new BooleanInput(joystick1, Port.INC_SPEED_BTN),
-				new BooleanVariadicControl(
-			new ToggleBooleanControl(
-				new BooleanInput(joystick1, Port.DEC_SPEED_BTN)),
-			1,
-			-1.0),
-			0
-			);
-	}
-	
-	
-	public void update() {
+	public void tick() {
 		dsl.println(Line.kMain6, 1, "Don't SPACEBRO");
-		dsl.println(Line.kUser2, 1, "Direction: "+direction.getValue());
-		drive.mecanumDrive_Cartesian(0, direction.getValue(), 0, 0);
-		// fireMotor.set(fire.getValue());
+		dsl.println(Line.kUser2, 1, "DigIO: " + c.getPressureSwitchValue());
 		dsl.updateLCD();
-//		drive.tankDrive(foo.getValue(), foo.getValue());
 	}
 
 }

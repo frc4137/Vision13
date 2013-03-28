@@ -1,5 +1,7 @@
 package com.wildelake.frc.vision13.camera;
 
+import java.util.Date;
+
 import com.wildelake.frc.vision13.Config;
 import com.wildelake.frc.vision13.utils.MoreMath;
 
@@ -84,6 +86,7 @@ public abstract class Stereoscope extends RangeFinder {
 		}
 		
 		public void run() {
+			long start = new Date().getTime();
 			try { reports[index] = sscope.updateSide(left, "/tmp/" + name + "_"); }
 			catch (NIVisionException e) { e.printStackTrace(); }
 			if (reports[unindex] == null) return;
@@ -91,6 +94,7 @@ public abstract class Stereoscope extends RangeFinder {
 			sscope.setRightReports(reports[unindex]);
 			sscope.setRefreshing(false);
 			sscope.refreshed();
+			System.out.println("time to refresh: " + (new Date().getTime() - start) / 1000);
 		}
 	}
 	

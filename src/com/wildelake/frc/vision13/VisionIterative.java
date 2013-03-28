@@ -7,7 +7,6 @@
 
 package com.wildelake.frc.vision13;
 
-import com.wildelake.frc.vision13.Config;
 import com.wildelake.frc.vision13.Port;
 import com.wildelake.frc.vision13.camera.*;
 import com.wildelake.frc.vision13.components.*;
@@ -15,6 +14,7 @@ import com.wildelake.frc.vision13.controls.MyJoystick;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Solenoid;
 //import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -31,6 +31,7 @@ public class VisionIterative extends IterativeRobot {
 	private Pilot manual;
 	private SpeedController fireMotor;
 	private SpeedController[] driveMotors;
+	private Piston shooterTable, kicker;
 
 	public void robotInit() {
 		driveMotors = new SpeedController[] {
@@ -45,18 +46,15 @@ public class VisionIterative extends IterativeRobot {
 			Function.calibrator( 0.006, -1.062,  0.120,  0.004, -1.028,  0.079), // Front Left
 			Function.calibrator(-0.004,  1.031, -0.089, -0.005,  1.046, -0.082)  // Front Right
 		};
-//		Function[] calibrators = new Function[] {
-//			Function.calibrator(0, -1, 0, 0, -1, 0), // Back Left
-//			Function.calibrator(0,  1, 0, 0,  1, 0), // Back Right
-//			Function.calibrator(0, -1, 0, 0, -1, 0), // Front Left
-//			Function.calibrator(0,  1, 0, 0,  1, 0)  // Front Right
-//		};
 		for (int i = 0; i < driveMotors.length; i++) {
-			driveMotors[i] = new RampedSpeedController(driveMotors[i], Config.getRamp());
+//			driveMotors[i] = new RampedSpeedController(driveMotors[i], Config.getRamp());
 			driveMotors[i] = new CalibratedSpeedController(driveMotors[i], calibrators[i]);
 		}
 		drive = new RobotDrive(driveMotors[0], driveMotors[1], driveMotors[2], driveMotors[3]);
-		fireMotor = new Jaguar(Port.FIRE_MOTOR);
+//		fireMotor = new Jaguar(Port.FIRE_MOTOR);
+		
+//		shooterTable = new Piston(new Solenoid(Port.SHOOTER_TABLE_UP), new Solenoid(Port.SHOOTER_TABLE_DOWN));
+//		kicker = new Piston(new Solenoid(Port.KICKER_OUT), new Solenoid(Port.KICKER_IN));
 		
 //		Camera left  = new NonSingletonAxisCamera("10.41.37.11");
 //		Camera right = new NonSingletonAxisCamera("10.41.37.12");
@@ -72,23 +70,21 @@ public class VisionIterative extends IterativeRobot {
 //					return img.thresholdHSL(88, 198, 33, 186, 167, 255);
 //				}
 //			});
+//		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), new MyJoystick(Port.JOYSTICK2), drive, fireMotor, shooterTable, kicker);
+//		manual = new CalibrationPilot(new MyJoystick(Port.JOYSTICK1), driveMotors);
 //		manual = new AutoPilot(
 //			new MyJoystick(Port.JOYSTICK1),
 //			drive,
 //			fireMotor,
 //			new Stereoscope(left, right) {
 //				public BinaryImage threshold(ColorImage img) throws NIVisionException {
-//					if (img == null) {
-//						System.out.println("NULL");
-//						return null;
-//					}
+//					if (img == null) return null;
 //					// Numbers below are values that the target should be due to lighting and
 //					// electrical tape, derived using histograms from actual images in NI Vision Assistant
 //					return img.thresholdHSL(88, 198, 33, 186, 167, 255);
 //				}
 //			});
-		manual = new ManualPilot(new MyJoystick(Port.JOYSTICK1), drive, fireMotor);
-//		manual = new CalibrationPilot(new MyJoystick(Port.JOYSTICK1), driveMotors);
+		manual = new MechanicalPilot();
 	}
 
 	public void teleopPeriodic() {
@@ -106,7 +102,4 @@ public class VisionIterative extends IterativeRobot {
 	public void autonomousInit() {
 		System.out.println("I'm sorry Dave, I'm afraid I can't do that.");
 	}
-	//	public void disabledPeriodic() {
-//		manual.tick();
-//	}
 }

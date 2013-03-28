@@ -1,11 +1,13 @@
 package com.wildelake.frc.vision13.pilot;
 
 import com.wildelake.frc.vision13.Port;
+import com.wildelake.frc.vision13.components.Piston;
 import com.wildelake.frc.vision13.controls.BooleanInput;
 import com.wildelake.frc.vision13.controls.Controller;
 import com.wildelake.frc.vision13.controls.VariadicInput;
 import com.wildelake.frc.vision13.controls.compositions.*;
 
+import edu.wpi.first.wpilibj.DigitalModule;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -15,19 +17,26 @@ import edu.wpi.first.wpilibj.SpeedController;
  * ManualPilot is the primary set of controls for manually operating the robot.
  */
 public class ManualPilot extends ControlSet implements Pilot {
-	private final Controller joystick1;
+	private final Controller joystick1, joystick2;
 	private final RobotDrive drive;
 	private final SpeedController fireMotor;
 	private VariadicControl joy1x, joy1y, joy1rot;
 	private VariadicControl fire;
 	private DriverStationLCD dsl;
+	private DigitalModule dm;
+	private BooleanControl shooterTableButton, kickerButton;
+	private final Piston shooterTable, kicker;
 	
-	public ManualPilot(Controller joystick1, RobotDrive drive, SpeedController fireMotor) {
+	public ManualPilot(Controller joystick1, Controller joystick2, RobotDrive drive, SpeedController fireMotor, Piston shooterTable, Piston kicker) {
 		this.joystick1 = joystick1;
+		this.joystick2 = joystick2;
+		this.shooterTable = shooterTable;
+		this.kicker = kicker;
 		this.drive = drive;
 		this.fireMotor = fireMotor;
 		Control.buildControlSet(this);
 		dsl = DriverStationLCD.getInstance();
+		dm = DigitalModule.getInstance(1);
 	}
 	
 	
@@ -71,16 +80,23 @@ public class ManualPilot extends ControlSet implements Pilot {
 				0,
 				1.0),
 			-1);
+		
+		shooterTableButton = new ToggleBooleanControl(new BooleanInput(joystick2, Port.SHOOTER_TABLE_BTN));
+		kickerButton = new InstantaneousBooleanControl(new BooleanInput(joystick2, Port.SHOOTER_TABLE_BTN));
 	}
 	
 	
 	public void update() {
+		if (shooterTableButton.getValue()) shooterTable.out();
+		else shooterTable.in();
+		if (kickerButton.getValue()) kicker.out();
+		else kicker.in();
 		dsl.println(Line.kMain6, 1, "Don't SPACEBRO");
 		dsl.println(Line.kUser2, 1, "JoyStick 1 X: "+joy1x.getValue());
 		dsl.println(Line.kUser3, 1, "JoyStick 1 Y: "+joy1y.getValue());
 		dsl.println(Line.kUser4, 1, "JoyStick 1 r: " + joy1rot.getValue());
-		dsl.println(Line.kUser5, 1, String.valueOf(fire.getValue()));
-		drive.mecanumDrive_Cartesian(joy1x.getValue(), joy1y.getValue(), joy1rot.getValue(), 0);
+		dsl.println(Line.kUser5, 1, String.valueOf(fire.getValue()), dm.getDIO(14));
+		drive.mecanumDrive_Cartesian(joy1x.getValue(), joy1y.getValue(), -joy1rot.getValue(), 0);
 		fireMotor.set(fire.getValue());
 		dsl.updateLCD();
 	}

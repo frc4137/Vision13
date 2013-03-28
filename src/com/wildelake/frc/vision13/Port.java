@@ -32,5 +32,13 @@ public class Port {
 		FIRE_BTN = 12,
 		FIRE_MOTOR = 5,
 		
-		STEREOSCOPE_BTN = 10;
+		STEREOSCOPE_BTN = 10,
+		
+		KICKER_BTN = 6,
+		SHOOTER_TABLE_BTN = 7,
+		
+		KICKER_OUT = 3,
+		KICKER_IN = 4,
+		SHOOTER_TABLE_UP = 2,
+		SHOOTER_TABLE_DOWN = 1;
 }
